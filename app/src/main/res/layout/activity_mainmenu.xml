@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    tools:context=".MainMenu">
+
+    <TextView
+        android:id="@+id/welcome3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="Welcome To Your Building"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/chatBtn"
+        android:layout_width="213dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="128dp"
+        android:backgroundTint="#FF039BE5"
+        android:text="@string/chat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/problemBtn"
+        android:layout_width="213dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="204dp"
+        android:backgroundTint="#FF039BE5"
+        android:text="@string/problem"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/surveyBtn"
+        android:layout_width="213dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="284dp"
+        android:backgroundTint="#FF039BE5"
+        android:text="@string/survey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/Parking"
+        android:layout_width="213dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="364dp"
+        android:backgroundTint="#FF039BE5"
+        android:text="@string/parking"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

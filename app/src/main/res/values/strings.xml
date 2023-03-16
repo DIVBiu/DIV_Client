@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">ManagementApp</string>
+    <string name="login_username">UserName</string>
+    <string name="login_password">Password</string>
+    <string name="login_submitBtn">Submit</string>
+    <string name="signup_nickname">Nickname</string>
+    <string name="dont_have_an_account_signup">Signup</string>
+    <string name="already_have_an_account_login">Login</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="BaseUrl">http://10.0.2.2:7261/api/</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="contact_username">Contact Username</string>
+    <string name="username">Username</string>
+    <string name="nickname">Nickname</string>
+    <string name="parking">Parking</string>
+    <string name="survey">Answer Survey</string>
+    <string name="problem">New Problem</string>
+    <string name="chat">Chat</string>
+    <string name="welcome">Welcome To Your Building</string>
+    <string name="select_an_option">Select an option:</string>
+<!--    <string-array name="options">-->
+<!--        <item>Option 1</item>-->
+<!--        <item>Option 2</item>-->
+<!--        <item>Option 3</item>-->
+<!--    </string-array>-->
 </resources>
