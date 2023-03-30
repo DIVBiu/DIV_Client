@@ -18,9 +18,10 @@
     <string name="chat">Chat</string>
     <string name="welcome">Welcome To Your Building</string>
     <string name="select_an_option">Select an option:</string>
-<!--    <string-array name="options">-->
-<!--        <item>Option 1</item>-->
-<!--        <item>Option 2</item>-->
-<!--        <item>Option 3</item>-->
-<!--    </string-array>-->
+    <string name="spinner_options">dropDownMenuExample</string>
+    <string-array name="options">
+        <item>Option 1</item>
+        <item>Option 2</item>
+        <item>Option 3</item>
+    </string-array>
 </resources>
