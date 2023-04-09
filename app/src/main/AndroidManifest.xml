@@ -31,6 +31,9 @@
             android:name=".ChatScreen"
             android:exported="false" />
         <activity
+            android:name=".ChooseBuilding"
+            android:exported="false" />
+        <activity
             android:name=".Building"
             android:exported="false" />
         <activity

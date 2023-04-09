@@ -1,32 +1,46 @@
 package com.example.managementapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.textclassifier.TextLinks;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.BufferedReader;
+
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
+import java.lang.reflect.Type;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 
 public class LoginPage extends AppCompatActivity {
+    private static final String SERVER_URL = "http://192.168.1.108:5000/users/login?email=%s&password=%s";
     //private static final String SERVER_URL = "http://172.20.10.2:5000/users/login?email=%s&password=%s";
-    private static final String SERVER_URL = "http://192.168.10.191:5000/users/login?email=%s&password=%s";
+    //private static final String SERVER_URL = "http://192.168.10.191:5000/users/login?email=%s&password=%s";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +101,13 @@ public class LoginPage extends AppCompatActivity {
         super.onRestart();
         Log.i("LoginPage", "onRestart");
     }
+    public static Map<String, String> jsonToMap (String json) {
+        Gson gson = new Gson();
+        Type type = Map.class.getTypeParameters()[1];
+        Map<String, String> map = gson.fromJson(json, type);
 
+        return map;
+    }
     public void login(String email, String password) throws IOException {
         URL url = new URL(String.format(SERVER_URL, email, password));
         OkHttpClient client = new OkHttpClient();
@@ -101,8 +121,11 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    Intent intent = new Intent(LoginPage.this, MainMenu.class);
+                    //String responseBody = response.body().string();
+                    //Map<String,String> answer = jsonToMap(responseBody);
+                    Intent intent = new Intent(LoginPage.this, ChooseBuilding.class);
+                    intent.putExtra("email", email);
+                    //intent.putStringArrayListExtra("buildings", buildings);
                     startActivity(intent);
                     // Handle the response body here
                 } else {

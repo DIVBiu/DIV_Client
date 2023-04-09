@@ -1,56 +1,44 @@
 package com.example.managementapp;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import java.util.ArrayList;
 
-import androidx.appcompat.app.AppCompatActivity;
+public class Building{
 
-public class Building extends AppCompatActivity {
+    private String id;
+    private String address;
+    private ArrayList<User> tenants;
 
-    private EditText buildingEditText;
-    private RadioGroup radioGroup;
-    private RadioButton committeeRadioButton, tenantRadioButton;
-    private Button submitButton;
+    public Building(String id, String address, ArrayList<User> tenants) {
+        this.id = id;
+        this.address = address;
+        this.tenants = tenants;
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_building);
+    public Building() {
+    }
 
-        buildingEditText = findViewById(R.id.buildingEditText);
-        radioGroup = findViewById(R.id.radioGroup);
-        committeeRadioButton = findViewById(R.id.committeeRadioButton);
-        tenantRadioButton = findViewById(R.id.tenantRadioButton);
-        submitButton = findViewById(R.id.submitButton);
+    public String getId() {
+        return id;
+    }
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String buildingName = buildingEditText.getText().toString();
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                if(selectedId == R.id.committeeRadioButton) {
-                    // House Committee Manager option selected
-                    Toast.makeText(Building.this, "Building: " + buildingName + "\nOption: House Committee Manager", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Building.this, MainMenu.class);
-                    intent.putExtra("building", buildingName);
-                    startActivity(intent);
-                } else if(selectedId == R.id.tenantRadioButton) {
-                    // Tenant option selected
-                    Toast.makeText(Building.this, "Building: " + buildingName + "\nOption: Tenant", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Building.this, MainMenu.class);
-                    intent.putExtra("building", buildingName);
-                    startActivity(intent);
-                } else {
-                    // No option selected
-                    Toast.makeText(Building.this, "Please select an option", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public ArrayList<User> getTenants() {
+        return tenants;
+    }
+
+    public void setTenants(ArrayList<User> tenants) {
+        this.tenants = tenants;
     }
 }
+
