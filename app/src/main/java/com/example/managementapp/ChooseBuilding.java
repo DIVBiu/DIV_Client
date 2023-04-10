@@ -44,6 +44,7 @@ public class ChooseBuilding extends AppCompatActivity {
     List<String> buildings = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
     private String my_email;
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class ChooseBuilding extends AppCompatActivity {
         lvBuildings = findViewById(R.id.my_listview);
         my_email = getIntent().getExtras().get("email").toString();
         try {
-            try_to_get_building(my_email);
+            get_building(my_email);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -61,6 +62,7 @@ public class ChooseBuilding extends AppCompatActivity {
                 String selectedItem = adapter.getItem(position);
                 Intent intent = new Intent(ChooseBuilding.this, MainMenu.class);
                 intent.putExtra("building", selectedItem);
+                intent.putExtra("email", my_email);
                 startActivity(intent);
             }
         });
@@ -90,7 +92,8 @@ public class ChooseBuilding extends AppCompatActivity {
 //        });
 
     }
-    public void try_to_get_building(String email) throws MalformedURLException {
+
+    public void get_building(String email) throws MalformedURLException {
         URL url = new URL(String.format(SERVER_URL, email));
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
@@ -105,7 +108,8 @@ public class ChooseBuilding extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
                     Gson gson = new Gson();
-                    Type listType = new TypeToken<List<String>>(){}.getType();
+                    Type listType = new TypeToken<List<String>>() {
+                    }.getType();
                     List<String> buildingList = gson.fromJson(jsonResponse, listType);
                     ArrayList<String> list = new ArrayList<>(buildingList);
                     buildings = list;
@@ -130,7 +134,7 @@ public class ChooseBuilding extends AppCompatActivity {
         });
     }
 
-    public static Map<String, String> jsonToMap (String json) {
+    public static Map<String, String> jsonToMap(String json) {
         Gson gson = new Gson();
         Type type = Map.class.getTypeParameters()[1];
         Map<String, String> map = gson.fromJson(json, type);
@@ -138,7 +142,7 @@ public class ChooseBuilding extends AppCompatActivity {
         return map;
     }
 
-    void showCustomDialog(){
+    void showCustomDialog() {
         final Dialog dialog = new Dialog(ChooseBuilding.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
@@ -152,12 +156,9 @@ public class ChooseBuilding extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String address = contact_username.getText().toString();
-                //String nickname = contact_name.getText().toString();
-                //String server = contact_server.getText().toString();
-                if(address.isEmpty() ){
+                if (address.isEmpty()) {
                     Toast.makeText(ChooseBuilding.this, "One of the fields is empty", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     URL url = null;
                     try {
                         url = new URL(String.format("http://192.168.10.108:5000/buildings/add_tenant_to_building?email=%s&address=%s", my_email, address));
@@ -177,16 +178,14 @@ public class ChooseBuilding extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(okhttp3.Call call, IOException e) {
-
                             e.printStackTrace();
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if (response.code() == 200) {
-                                try_to_get_building(my_email);
+                                get_building(my_email);
                                 dialog.dismiss();
-                                // Handle the response body here
                             } else {
                                 if (response.code() == 500) {
                                     runOnUiThread(new Runnable() {
@@ -211,58 +210,13 @@ public class ChooseBuilding extends AppCompatActivity {
                     });
                 }
 
-                }
+            }
         });
         dialog.show();
     }
+
     protected void onResume() {
         super.onResume();
-//        try {
-//            try_to_get_building(my_email);
-//        } catch (MalformedURLException e) {
-//            throw new RuntimeException(e);
-//        }
-        //buildings.clear();
-        //buildings.addAll(contactDao.index());
-        //adapter.notifyDataSetChanged();
-    }
-    public void get_buildings(ArrayList<Building> buildings) {
-        for (Building building:buildings) {
 
-        }
-//        WebServiceAPI webServiceAPI = postAPI.getWebServiceAPI();
-//        Call<List<Contact>> call = webServiceAPI.getcontacts(username);
-//        call.enqueue(new Callback<List<Contact>>() {
-//            @Override
-//            public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
-//                List<Contact> contacts = response.body();
-//                AppDB.clearRoomDB();
-//                for (Contact contact:contacts) {
-//                    contactDao.insert(contact);
-//                    Call<List<Message>> call2 = webServiceAPI.getmessages(contact.getId(), username);
-//                    call2.enqueue(new Callback<List<Message>>() {
-//                        @Override
-//                        public void onResponse(Call<List<Message>> call2, Response<List<Message>> response2) {
-//                            List<Message> messages = response2.body();
-//                            for (Message message:messages) {
-//                                message.setContactID(contact.getId());
-//                                messageDao.insert(message);
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<List<Message>> call2, Throwable t) {
-//                            Toast.makeText(ContactList.this, "Failed to contact with the server", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                }
-//                onResume();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Contact>> call, Throwable t) {
-//                Toast.makeText(ContactList.this, "Failed to contact with the server", Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 }

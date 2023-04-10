@@ -129,9 +129,13 @@ public class LoginPage extends AppCompatActivity {
                     startActivity(intent);
                     // Handle the response body here
                 } else {
-                    // Handle unsuccessful response
-                    Toast.makeText(LoginPage.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                    onResume();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginPage.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
+                            onResume();
+                        }
+                    });
                 }
             }
         });

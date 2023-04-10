@@ -106,7 +106,8 @@ public class Register extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
                     Log.d("LoginResponse", responseBody);
-                    Intent intent = new Intent(Register.this, Building.class);
+                    Intent intent = new Intent(Register.this, ChooseBuilding.class);
+                    intent.putExtra("email", email.toString());
                     startActivity(intent);
                     // Handle the response body here
                 } else {
