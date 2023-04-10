@@ -36,7 +36,8 @@ import okhttp3.Response;
 public class ChooseBuilding extends AppCompatActivity {
     private ListView lvBuildings;
     //List<String> buildings = new ArrayList<String>();
-    private static final String SERVER_URL = "http://192.168.1.108:5000/users/get_buildings_by_user?email=%s";
+    private static final String SERVER_URL = "http://192.168.10.108:5000/users/get_buildings_by_user?email=%s";
+
     List<String> buildings = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +105,17 @@ public class ChooseBuilding extends AppCompatActivity {
                     List<String> buildingList = gson.fromJson(jsonResponse, listType);
                     ArrayList<String> list = new ArrayList<>(buildingList);
                     buildings = list;
-                    adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
-                    lvBuildings.setAdapter(adapter);
-                    adapter.addAll(buildings);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
+                            lvBuildings.setAdapter(adapter);
+                            adapter.addAll(buildings);
+                        }
+                    });
+//                    adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
+//                    lvBuildings.setAdapter(adapter);
+//                    adapter.addAll(buildings);
 
                 } else {
                     // Handle unsuccessful response
