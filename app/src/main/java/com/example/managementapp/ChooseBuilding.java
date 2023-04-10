@@ -3,6 +3,7 @@ package com.example.managementapp;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -28,8 +29,10 @@ import java.util.Map;
 import android.widget.ArrayAdapter;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -40,12 +43,13 @@ public class ChooseBuilding extends AppCompatActivity {
 
     List<String> buildings = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
+    private String my_email;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trying);
         lvBuildings = findViewById(R.id.my_listview);
-        String my_email = getIntent().getExtras().get("email").toString();
+        my_email = getIntent().getExtras().get("email").toString();
         try {
             try_to_get_building(my_email);
         } catch (MalformedURLException e) {
@@ -147,14 +151,64 @@ public class ChooseBuilding extends AppCompatActivity {
         add_contact_submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = contact_username.getText().toString();
+                String address = contact_username.getText().toString();
                 //String nickname = contact_name.getText().toString();
                 //String server = contact_server.getText().toString();
-                if(username.isEmpty() ){
+                if(address.isEmpty() ){
                     Toast.makeText(ChooseBuilding.this, "One of the fields is empty", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    System.out.print("Hello");
+                    URL url = null;
+                    try {
+                        url = new URL(String.format("http://192.168.10.108:5000/buildings/add_tenant_to_building?email=%s&address=%s", my_email, address));
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    RequestBody requestBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("email", my_email)
+                            .addFormDataPart("address", address)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .put(requestBody)
+                            .build();
+                    OkHttpClient client = new OkHttpClient();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(okhttp3.Call call, IOException e) {
+
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.code() == 200) {
+                                try_to_get_building(my_email);
+                                dialog.dismiss();
+                                // Handle the response body here
+                            } else {
+                                if (response.code() == 500) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(ChooseBuilding.this, "You are already a tenant in this building", Toast.LENGTH_SHORT).show();
+                                            onResume();
+                                        }
+                                    });
+                                }
+                                if (response.code() == 404) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(ChooseBuilding.this, "Not a Valid Building", Toast.LENGTH_SHORT).show();
+                                            onResume();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
                 }
 
                 }
@@ -163,7 +217,12 @@ public class ChooseBuilding extends AppCompatActivity {
     }
     protected void onResume() {
         super.onResume();
-        buildings.clear();
+//        try {
+//            try_to_get_building(my_email);
+//        } catch (MalformedURLException e) {
+//            throw new RuntimeException(e);
+//        }
+        //buildings.clear();
         //buildings.addAll(contactDao.index());
         //adapter.notifyDataSetChanged();
     }
