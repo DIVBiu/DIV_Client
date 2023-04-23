@@ -44,9 +44,9 @@ public class Register extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-        }
-        Log.i("SignUpPage", "onCreate");
-    });
+            }
+            Log.i("SignUpPage", "onCreate");
+        });
     }
 
     @Override
@@ -78,9 +78,9 @@ public class Register extends AppCompatActivity {
         super.onRestart();
         Log.i("SignUpPage", "onRestart");
     }
-    private static final String SERVER_URL = "http://192.168.10.108:5000/users/register?name=%s&email=%s&password=%s";
-    //private static final String SERVER_URL = "http://172.20.10.2:5000/users/register?name=%s&email=%s&password=%s";
-    //private static final String SERVER_URL = "http://192.168.10.191:5000/users/register?name=%s&email=%s&password=%s";
+    private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/register?name=%s&email=%s&password=%s";
+    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/register?name=%s&email=%s&password=%s";
+    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/register?name=%s&email=%s&password=%s";
     public void signup(String email, String full_name, String password) throws IOException {
         URL url = new URL(String.format(SERVER_URL, full_name,email, password));
         RequestBody requestBody = new MultipartBody.Builder()

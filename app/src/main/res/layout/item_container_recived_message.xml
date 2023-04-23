@@ -3,8 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/background_received_message"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="4dp">
+
+    <TextView
+        android:id="@+id/messageSender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:textColor="#DA0808"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/textMessage"
@@ -12,11 +24,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
-        android:background="@drawable/background_received_message"
+
         android:padding="12dp"
         android:textColor="@color/white"
         android:textSize="13sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/messageSender"
         app:layout_constraintWidth_percent="0.8"
         tools:ignore="MissingConstraints" />
 

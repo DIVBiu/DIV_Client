@@ -38,9 +38,9 @@ import okhttp3.ResponseBody;
 
 
 public class LoginPage extends AppCompatActivity {
-    private static final String SERVER_URL = "http://192.168.10.108:5000/users/login?email=%s&password=%s";
-    //private static final String SERVER_URL = "http://172.20.10.2:5000/users/login?email=%s&password=%s";
-    //private static final String SERVER_URL = "http://192.168.10.191:5000/users/login?email=%s&password=%s";
+    private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/login?email=%s&password=%s";
+    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/login?email=%s&password=%s";
+    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/login?email=%s&password=%s";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

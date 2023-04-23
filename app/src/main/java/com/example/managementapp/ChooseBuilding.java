@@ -39,7 +39,7 @@ import okhttp3.Response;
 public class ChooseBuilding extends AppCompatActivity {
     private ListView lvBuildings;
     //List<String> buildings = new ArrayList<String>();
-    private static final String SERVER_URL = "http://192.168.10.108:5000/users/get_buildings_by_user?email=%s";
+    private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/get_buildings_by_user?email=%s";
 
     List<String> buildings = new ArrayList<String>();
     private ArrayAdapter<String> adapter;

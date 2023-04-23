@@ -39,6 +39,7 @@
 //import okhttp3.OkHttpClient;
 //import okhttp3.Request;
 //
+//
 //public class ChatScreen extends AppCompatActivity {
 //    private View back;
 //    private View send;
@@ -52,8 +53,8 @@
 //    private static RecyclerView recyclerView;
 //    private String content;
 //    private String Full_name;
-//    private static final String SERVER_URL = "http://192.168.10.108:5000/users/get_name_by_email?email=%s";
-//    private static final String GET_BUILDING_URL = "http://192.168.10.108:5000/buildings/get_chat_by_building?address=%s";
+//    private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/get_name_by_email?email=%s";
+//    private static final String GET_BUILDING_URL = "http://"+GetIP.getIPAddress()+":5000/buildings/get_chat_by_building?address=%s";
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_chat_screen);
@@ -68,7 +69,7 @@
 //        get_messages(BuildingID);
 //        chatAdapter = new ChatAdapter(messages);
 //        recyclerView.setAdapter(chatAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        // recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //    }
 //    private static final SimpleDateFormat dateFormat =
 //            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
@@ -165,6 +166,9 @@
 //import androidx.recyclerview.widget.LinearLayoutManager;
 //import androidx.recyclerview.widget.RecyclerView;
 //
+//import com.example.managementapp.ChatAdapter;
+//import com.example.managementapp.MainMenu;
+//import com.example.managementapp.Message;
 //import com.google.gson.Gson;
 //import com.google.gson.JsonArray;
 //import com.google.gson.JsonElement;
@@ -433,164 +437,164 @@
 
 
 
-package com.example.managementapp;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
-
-import com.example.managementapp.databinding.ActivityChatScreenBinding;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.Service;
-import android.content.Intent;
-import android.os.Build;
-import android.os.IBinder;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class ChatScreen extends AppCompatActivity {
-
-    //static public int id = 9;
-    private List<Message> messages = new ArrayList<Message>();
-    private ActivityChatScreenBinding binding;
-    // private MessageDao messageDao;
-    private TextView name;
-    private View back;
-    private View send;
-    private EditText input;
-    private String user_email;
-    private ChatAdapter chatAdapter;
-    private String building_address;
-    private String content;
-    private static final String GET_BUILDING_URL = "http://192.168.10.108:5000/buildings/get_chat_by_building?address=%s";
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityChatScreenBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        user_email = getIntent().getExtras().getString("email");
-        building_address = getIntent().getExtras().getString("building");
-        name = findViewById(R.id.textName);
-        back = findViewById(R.id.imageBack);
-//        back.setOnClickListener(v -> {
-//            Intent intent = new Intent(this, MainMenu.class);
-//            startActivity(intent);
-//        });
-        name.setText("" + building_address + "");
-        input = findViewById(R.id.inputMessage);
-        send = findViewById(R.id.layoutSend);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                messages.add(new Message("String content", "String date", "String sender", "String email"));
-                chatAdapter = new ChatAdapter(messages);
-                binding.chatRecyclerView.setAdapter(chatAdapter);
-            }
-        });
-//        get_messages(building_address);
-//        chatAdapter = new ChatAdapter(messages);
-//        binding.chatRecyclerView.setAdapter(chatAdapter);
-//        send.setOnClickListener(v -> {
-//            content = input.getText().toString();
-//            new_message(contact_id, ConnectedUsername, content);
-//            input.setText("");
-//        });
-    }
-        @NonNull
-    public static ArrayList<Message> convertJsonToMessages(String json) {
-        ArrayList<Message> m = new ArrayList<>();
-        Gson gson = new Gson();
-        JsonArray jsonArray = gson.fromJson(json, JsonArray.class);
-        //JsonArray jsonMessages = jsonArray.getAsJsonArray("messages");
-        for (JsonElement jsonElement : jsonArray) {
-            JsonObject jsonMessage = jsonElement.getAsJsonObject();
-            String content = jsonMessage.get("content").getAsString();
-            String dateString = jsonMessage.get("date").getAsString();
-//            Date date;
-//            try {
-//                date = dateFormat.parse(dateString);
-//            } catch (Exception e) {
-//                date = new Date();
+//package com.example.managementapp;
+//
+//import android.annotation.SuppressLint;
+//import android.content.Intent;
+//import android.os.Build;
+//import android.os.Bundle;
+//import android.view.View;
+//import android.widget.EditText;
+//import android.widget.TextView;
+//import android.widget.Toast;
+//
+//import androidx.annotation.RequiresApi;
+//import androidx.appcompat.app.AppCompatActivity;
+//
+//
+//import com.example.managementapp.databinding.ActivityChatScreenBinding;
+//import com.google.gson.Gson;
+//import com.google.gson.JsonArray;
+//import com.google.gson.JsonElement;
+//import com.google.gson.JsonObject;
+//
+//import android.app.Notification;
+//import android.app.NotificationChannel;
+//import android.app.NotificationManager;
+//import android.app.Service;
+//import android.content.Intent;
+//import android.os.Build;
+//import android.os.IBinder;
+//
+//import androidx.annotation.NonNull;
+//import androidx.core.app.NotificationCompat;
+//import androidx.core.app.NotificationManagerCompat;
+//
+//import java.io.IOException;
+//import java.net.MalformedURLException;
+//import java.net.URL;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
+//import retrofit2.Call;
+//import retrofit2.Callback;
+//import retrofit2.Response;
+//
+//public class ChatScreen extends AppCompatActivity {
+//
+//    //static public int id = 9;
+//    private List<Message> messages = new ArrayList<Message>();
+//    private ActivityChatScreenBinding binding;
+//    // private MessageDao messageDao;
+//    private TextView name;
+//    private View back;
+//    private View send;
+//    private EditText input;
+//    private String user_email;
+//    private ChatAdapter chatAdapter;
+//    private String building_address;
+//    private String content;
+//    private static final String GET_BUILDING_URL = "http://192.168.10.108:5000/buildings/get_chat_by_building?address=%s";
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        binding = ActivityChatScreenBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+//        user_email = getIntent().getExtras().getString("email");
+//        building_address = getIntent().getExtras().getString("building");
+//        name = findViewById(R.id.textName);
+//        back = findViewById(R.id.imageBack);
+////        back.setOnClickListener(v -> {
+////            Intent intent = new Intent(this, MainMenu.class);
+////            startActivity(intent);
+////        });
+//        name.setText("" + building_address + "");
+//        input = findViewById(R.id.inputMessage);
+//        send = findViewById(R.id.layoutSend);
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                messages.add(new Message("String content", "String date", "String sender", "String email"));
+//                chatAdapter = new ChatAdapter(messages);
+//                binding.chatRecyclerView.setAdapter(chatAdapter);
 //            }
-            String sender = jsonMessage.get("sender").getAsString();
-            String email = jsonMessage.get("email").getAsString();
-            Message message = new Message(content, dateString, sender, email);
-            m.add(message);
-        }
-        return m;
-    }
-    protected void get_messages(String BuildingID){
-        URL url = null;
-        try {
-            url = new URL(String.format(GET_BUILDING_URL, BuildingID));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String jsonResponse = response.body().string();
-                    messages = convertJsonToMessages(jsonResponse);
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onResume();
-                        }
-                    });
-                }
-            }
-        });
-    }
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    protected void onResume(){
-        super.onResume();
-        chatAdapter.notifyDataSetChanged();
-        binding.chatRecyclerView.setVisibility(View.VISIBLE);
-    }
+//        });
+////        get_messages(building_address);
+////        chatAdapter = new ChatAdapter(messages);
+////        binding.chatRecyclerView.setAdapter(chatAdapter);
+////        send.setOnClickListener(v -> {
+////            content = input.getText().toString();
+////            new_message(contact_id, ConnectedUsername, content);
+////            input.setText("");
+////        });
+//    }
+//        @NonNull
+//    public static ArrayList<Message> convertJsonToMessages(String json) {
+//        ArrayList<Message> m = new ArrayList<>();
+//        Gson gson = new Gson();
+//        JsonArray jsonArray = gson.fromJson(json, JsonArray.class);
+//        //JsonArray jsonMessages = jsonArray.getAsJsonArray("messages");
+//        for (JsonElement jsonElement : jsonArray) {
+//            JsonObject jsonMessage = jsonElement.getAsJsonObject();
+//            String content = jsonMessage.get("content").getAsString();
+//            String dateString = jsonMessage.get("date").getAsString();
+////            Date date;
+////            try {
+////                date = dateFormat.parse(dateString);
+////            } catch (Exception e) {
+////                date = new Date();
+////            }
+//            String sender = jsonMessage.get("sender").getAsString();
+//            String email = jsonMessage.get("email").getAsString();
+//            Message message = new Message(content, dateString, sender, email);
+//            m.add(message);
+//        }
+//        return m;
+//    }
+//    protected void get_messages(String BuildingID){
+//        URL url = null;
+//        try {
+//            url = new URL(String.format(GET_BUILDING_URL, BuildingID));
+//        } catch (MalformedURLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        OkHttpClient client = new OkHttpClient();
+//        Request request = new Request.Builder().url(url).build();
+//        client.newCall(request).enqueue(new okhttp3.Callback() {
+//            @Override
+//            public void onFailure(okhttp3.Call call, IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    String jsonResponse = response.body().string();
+//                    messages = convertJsonToMessages(jsonResponse);
+//                } else {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            onResume();
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//    }
+//    @SuppressLint("NotifyDataSetChanged")
+//    @Override
+//    protected void onResume(){
+//        super.onResume();
+//        chatAdapter.notifyDataSetChanged();
+//        binding.chatRecyclerView.setVisibility(View.VISIBLE);
+//    }
 
 //    public void new_message(String contact_id,String ConnectedUsername, String content){
 //        PostAPI postAPI = new PostAPI();
@@ -643,4 +647,144 @@ public class ChatScreen extends AppCompatActivity {
 //            }
 //        });
 //    }
+//}
+
+
+
+
+
+
+
+/////////////////
+//-----------------try dvir------------------------------
+package com.example.managementapp;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
+
+public class ChatScreen extends AppCompatActivity {
+    private View back;
+    private View send;
+    private EditText input;
+    private String BuildingID;
+    private String my_email;
+    private TextView building_title;
+    private List<Message> messages;
+    ///private static ChatAdapter chatAdapter = new ChatAdapter(messages);
+    private ChatAdapter chatAdapter;
+    private RecyclerView recyclerView;
+    private String content;
+    private String Full_name;
+    private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/get_name_by_email?email=%s";
+    private static final String GET_BUILDING_URL = "http://"+GetIP.getIPAddress()+":5000/buildings/get_chat_by_building?address=%s&email=%s";
+    //private PreferenceManager preferenceManager;
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat_screen);
+        recyclerView = findViewById(R.id.chatRecyclerView);
+        messages = new ArrayList<>();
+        chatAdapter = new ChatAdapter(messages);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        BuildingID = getIntent().getExtras().getString("building");
+        my_email = getIntent().getExtras().getString("email");
+        building_title = findViewById(R.id.textName);
+        building_title.setText(BuildingID);
+
+    }
+
+    private static final SimpleDateFormat dateFormat =
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+    static {
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+    @NonNull
+    private static ArrayList<Message> convertJsonToMessages(String json) {
+        Type listType = new TypeToken<ArrayList<Message>>() {}.getType();
+        Gson gson = new Gson();
+        ArrayList<Message> messagesList = gson.fromJson(json, listType);
+        return messagesList;
+    }
+    private void get_messages(String BuildingID){
+        URL url = null;
+        try {
+            url = new URL(String.format(GET_BUILDING_URL, BuildingID, my_email));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String jsonResponse = response.body().string();
+                    messages.addAll(convertJsonToMessages(jsonResponse));
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onResume();
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    protected void onResume(){
+        super.onResume();
+        recyclerView.setAdapter(chatAdapter);
+        get_messages(BuildingID);
+        chatAdapter.notifyDataSetChanged();
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+
+
 }

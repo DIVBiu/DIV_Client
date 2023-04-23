@@ -4,18 +4,29 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_sent_message"
     android:padding="4dp">
+
+    <TextView
+        android:id="@+id/messageSender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:textColor="#DA0808"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/textMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_sent_message"
         android:padding="12dp"
         android:textColor="@color/white"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/messageSender"
         app:layout_constraintWidth_percent="0.8" />
 
     <TextView
