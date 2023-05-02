@@ -1,8 +1,10 @@
 package com.example.managementapp;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 
-public class Building{
+public class Building extends AppCompatActivity {
 
     private String id;
     private String address;

@@ -79,8 +79,6 @@ public class Register extends AppCompatActivity {
         Log.i("SignUpPage", "onRestart");
     }
     private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/register?name=%s&email=%s&password=%s";
-    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/register?name=%s&email=%s&password=%s";
-    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/register?name=%s&email=%s&password=%s";
     public void signup(String email, String full_name, String password) throws IOException {
         URL url = new URL(String.format(SERVER_URL, full_name,email, password));
         RequestBody requestBody = new MultipartBody.Builder()

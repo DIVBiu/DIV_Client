@@ -528,6 +528,7 @@
 ////        get_messages(building_address);
 ////        chatAdapter = new ChatAdapter(messages);
 ////        binding.chatRecyclerView.setAdapter(chatAdapter);
+
 ////        send.setOnClickListener(v -> {
 ////            content = input.getText().toString();
 ////            new_message(contact_id, ConnectedUsername, content);
@@ -666,6 +667,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -675,11 +677,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.managementapp.ChatAdapter;
+import com.example.managementapp.GetIP;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -695,9 +706,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.time.LocalDate;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class ChatScreen extends AppCompatActivity {
@@ -712,8 +729,9 @@ public class ChatScreen extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     private RecyclerView recyclerView;
     private String content;
+    String Date;
     private String Full_name;
-    private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/get_name_by_email?email=%s";
+    private static final String SERVER_URL = "http://"+ GetIP.getIPAddress()+":5000/users/get_name_by_email?email=%s";
     private static final String GET_BUILDING_URL = "http://"+GetIP.getIPAddress()+":5000/buildings/get_chat_by_building?address=%s&email=%s";
     //private PreferenceManager preferenceManager;
 
@@ -724,11 +742,23 @@ public class ChatScreen extends AppCompatActivity {
         messages = new ArrayList<>();
         chatAdapter = new ChatAdapter(messages);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(chatAdapter);
         BuildingID = getIntent().getExtras().getString("building");
         my_email = getIntent().getExtras().getString("email");
+        input = findViewById(R.id.inputMessage);
+        content = input.getText().toString();
         building_title = findViewById(R.id.textName);
         building_title.setText(BuildingID);
-
+        send = findViewById(R.id.layoutSend);
+        send.setOnClickListener(v -> {
+            content = input.getText().toString();
+            try {
+                new_message(content);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+            input.setText("");
+        });
     }
 
     private static final SimpleDateFormat dateFormat =
@@ -761,30 +791,105 @@ public class ChatScreen extends AppCompatActivity {
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
                 if (response.isSuccessful()) {
+                    for (Message m :messages){
+                        messages.remove(m);
+                    }
+                    messages.clear();
                     String jsonResponse = response.body().string();
                     messages.addAll(convertJsonToMessages(jsonResponse));
                 } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onResume();
-                        }
-                    });
+                    System.out.println("connection failed in get message");
                 }
             }
         });
 
     }
-    @SuppressLint("NotifyDataSetChanged")
+    // Instantiate the RequestQueue.
+    public void new_message(String content) throws MalformedURLException {
+
+        //RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://" +GetIP.getIPAddress() +":5000/buildings/add_message_to_chat?email=%s&address=%s&content=%s&date=%s";  // replace with your server URL
+        // Create a JSON object to represent the message data
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDate currentDate = LocalDate.now();
+            Date = currentDate.toString();
+        }
+
+        // Create a request to add the message to the server
+        URL url1 = new URL(String.format(url, my_email,BuildingID, content, Date));
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("email", my_email)
+                .addFormDataPart("address", BuildingID)
+                .addFormDataPart("content", content)
+                .addFormDataPart("date", Date)
+                .build();
+        Request request = new Request.Builder()
+                .url(url1)
+                .post(requestBody)
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+//                    for(Message m : messages){
+//                        messages.remove(m);
+//                    }
+                    messages.clear();
+                    URL url = null;
+                    try {
+                        url = new URL(String.format(GET_BUILDING_URL, BuildingID, my_email));
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder().url(url).build();
+                    client.newCall(request).enqueue(new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(okhttp3.Call call, IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                String jsonResponse = response.body().string();
+                                messages.addAll(convertJsonToMessages(jsonResponse));
+                                //onResume();
+                                chatAdapter.notifyDataSetChanged();
+                                recyclerView.setVisibility(View.VISIBLE);
+                            } else {
+                                System.out.println("connection failed in the new msg");
+                            }
+                        }
+                    });
+
+                } else {
+                    // Handle unsuccessful response
+                    Log.d("ChatScreen", "BADDDDDD");
+                    //onResume();
+                }
+                //onResume();
+            }
+        });
+    }
+
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        recyclerView.setAdapter(chatAdapter);
+
+        //messages.clear();
         get_messages(BuildingID);
+        Log.i("ChatScreen", "onResume");
         chatAdapter.notifyDataSetChanged();
         recyclerView.setVisibility(View.VISIBLE);
     }
-
-
-
 }
+

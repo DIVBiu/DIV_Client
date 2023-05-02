@@ -3,7 +3,6 @@ package com.example.managementapp;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -26,7 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import android.widget.ArrayAdapter;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -48,7 +47,7 @@ public class ChooseBuilding extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.trying);
+        setContentView(R.layout.activity_choosebuilding);
         lvBuildings = findViewById(R.id.my_listview);
         my_email = getIntent().getExtras().get("email").toString();
         try {
@@ -71,25 +70,6 @@ public class ChooseBuilding extends AppCompatActivity {
         openDialog.setOnClickListener(v -> {
             showCustomDialog();
         });
-
-//        ListView lvContacts = findViewById(R.id.ContactList);
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contacts);
-//        lvContacts.setAdapter(adapter);
-//
-//
-//        lvContacts.setOnItemLongClickListener((adapterView, view, i, l) -> {
-//            Contact chat = contacts.remove(i);
-//            contactDao.delete(chat);
-//            adapter.notifyDataSetChanged();
-//            return true;
-//        });
-//
-//        lvContacts.setOnItemClickListener((adapterView, view, i, l) -> {
-//            Intent intent = new Intent(this, ChatScreen.class);
-//            intent.putExtra("contact_id", contacts.get(i).getId());
-//            intent.putExtra("connectedUsername", UsernameID);
-//            startActivity(intent);
-//        });
 
     }
 
@@ -161,7 +141,7 @@ public class ChooseBuilding extends AppCompatActivity {
                 } else {
                     URL url = null;
                     try {
-                        url = new URL(String.format("http://192.168.10.108:5000/buildings/add_tenant_to_building?email=%s&address=%s", my_email, address));
+                        url = new URL(String.format("http://"+ GetIP.getIPAddress()+":5000/buildings/add_tenant_to_building?email=%s&address=%s", my_email, address));
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
                     }

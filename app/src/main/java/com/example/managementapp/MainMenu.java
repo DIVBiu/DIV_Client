@@ -34,6 +34,12 @@ public class MainMenu extends AppCompatActivity{
             Intent intent2 = new Intent(MainMenu.this, NewProblem.class);
             startActivity(intent2);
         });
+        answer_survey_btn.setOnClickListener(t -> {
+            Intent intent = new Intent(MainMenu.this, ChooseSurvey.class);
+            intent.putExtra("building", BuildingID);
+            intent.putExtra("email", my_email);
+            startActivity(intent);
+        });
     }
 
     @Override
