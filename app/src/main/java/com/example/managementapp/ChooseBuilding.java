@@ -114,14 +114,6 @@ public class ChooseBuilding extends AppCompatActivity {
         });
     }
 
-    public static Map<String, String> jsonToMap(String json) {
-        Gson gson = new Gson();
-        Type type = Map.class.getTypeParameters()[1];
-        Map<String, String> map = gson.fromJson(json, type);
-
-        return map;
-    }
-
     void showCustomDialog() {
         final Dialog dialog = new Dialog(ChooseBuilding.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -31,7 +31,9 @@ public class MainMenu extends AppCompatActivity{
             startActivity(intent);
         });
         new_problem_btn.setOnClickListener(t -> {
-            Intent intent2 = new Intent(MainMenu.this, NewProblem.class);
+            Intent intent2 = new Intent(MainMenu.this, ProblemStatus.class);
+            intent2.putExtra("building", BuildingID);
+            intent2.putExtra("email", my_email);
             startActivity(intent2);
         });
         answer_survey_btn.setOnClickListener(t -> {

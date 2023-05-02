@@ -52,8 +52,6 @@ public class SurveyScreen extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //RadioButton radioButton = findViewById(R.id.radio_button);
-        //adapter = new ArrayAdapter<>(Survey.this, android.R.layout.simple_list_item_1);
         setContentView(R.layout.activity_survey);
         title = findViewById(R.id.title_textview);
         survey_btn = findViewById(R.id.survey_btn);
@@ -66,56 +64,6 @@ public class SurveyScreen extends AppCompatActivity {
 
         survey_btn.setOnClickListener(t -> {
             showCustomDialog();
-//            //ListView listView = findViewById(R.id.survey_listview);
-//            int selectedItemPosition = lvSurvey.getCheckedItemPosition();
-//
-//            if (selectedItemPosition != ListView.INVALID_POSITION) {
-//                String selectedItemValue = (String) lvSurvey.getItemAtPosition(selectedItemPosition);
-//
-//                URL url = null;
-//                try {
-//                    url = new URL(String.format(POST_SERVER_URL, email, survey_title, String.valueOf(selectedItemPosition)));
-//                } catch (MalformedURLException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                RequestBody requestBody = new MultipartBody.Builder()
-//                        .setType(MultipartBody.FORM)
-//                        .addFormDataPart("email", email)
-//                        .addFormDataPart("title", survey_title)
-//                        .addFormDataPart("choice", String.valueOf(selectedItemPosition))
-//                        .build();
-//                Request request = new Request.Builder()
-//                        .url(url)
-//                        .post(requestBody)
-//                        .build();
-//                OkHttpClient client = new OkHttpClient();
-//                client.newCall(request).enqueue(new Callback() {
-//                    @Override
-//                    public void onFailure(okhttp3.Call call, IOException e) {
-//
-//                        e.printStackTrace();
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Call call, Response response) throws IOException {
-//                        if (response.isSuccessful()) {
-//                            Intent intent = new Intent(SurveyScreen.this, MainMenu.class);
-//                            intent.putExtra("email", email);
-//                            intent.putExtra("building", building);
-//                            startActivity(intent);
-//                            // Handle the response body here
-//                        } else {
-//                            // Handle unsuccessful response
-//                            //Toast.makeText(SurveyScreen.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-//                            //onResume();
-//                        }
-//                    }
-//                });
-//            }
-//            // Do something with the selected item value
-//            else {
-//                // No item was selected
-//            }
         });
     }
 
@@ -124,13 +72,7 @@ public class SurveyScreen extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.confirm_submittion);
-
-//        TextView submittion = findViewById(R.id.confirm_btn);
         Button cancel = dialog.findViewById(R.id.cancel_btn);
-        //final EditText contact_username = dialog.findViewById(R.id.contact_username);
-        //submittion.setText("Are you sure this is your choice? You will not be able to change after submitting");
-        //final EditText contact_name = dialog.findViewById(R.id.contact_nickname);
-        //final EditText contact_server = dialog.findViewById(R.id.contact_server);
         Button confirm_survey = dialog.findViewById(R.id.confirm_survey);
 
         confirm_survey.setOnClickListener(t -> {
