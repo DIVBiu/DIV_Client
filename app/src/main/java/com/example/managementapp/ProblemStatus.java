@@ -52,17 +52,18 @@ public class ProblemStatus extends AppCompatActivity {
         address = getIntent().getExtras().getString("building");
         my_email = getIntent().getExtras().getString("email");
         lvProblems = findViewById(R.id.my_problem_listview);
+        FloatingActionButton openD = findViewById(R.id.add_button);
+        openD.setOnClickListener(v -> {
+            Intent intent = new Intent(ProblemStatus.this, NewProblem.class);
+            intent.putExtra("building", address);
+            intent.putExtra("email", my_email);
+            startActivity(intent);
+        });
         try {
             get_problems(my_email, address);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        FloatingActionButton openDialog = findViewById(R.id.addProblemBtn);
-        openDialog.setOnClickListener(v -> {
-            Intent intent = new Intent(ProblemStatus.this, NewProblem.class);
-            intent.putExtra("building", address);
-            intent.putExtra("email", my_email);
-        });
     }
 
     public void get_problems(String email, String address) throws MalformedURLException {

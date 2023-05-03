@@ -24,6 +24,13 @@ public class MainMenu extends AppCompatActivity{
         Button chat_btn = findViewById(R.id.chatBtn);
         Button new_problem_btn = findViewById(R.id.problemBtn);
         Button answer_survey_btn = findViewById(R.id.surveyBtn);
+        Button parking_btn = findViewById(R.id.parkingBtn);
+        parking_btn.setOnClickListener(c -> {
+            Intent intent = new Intent(MainMenu.this, ParkingScreen.class);
+            intent.putExtra("building", BuildingID);
+            intent.putExtra("email", my_email);
+            startActivity(intent);
+        });
         chat_btn.setOnClickListener(v -> {
             Intent intent = new Intent(MainMenu.this, ChatScreen.class);
             intent.putExtra("building", BuildingID);
@@ -42,6 +49,7 @@ public class MainMenu extends AppCompatActivity{
             intent.putExtra("email", my_email);
             startActivity(intent);
         });
+
     }
 
     @Override

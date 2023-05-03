@@ -9,12 +9,12 @@ public class Problem {
     private String type;
     private String description;
     @Nullable
-    private Date opening_date;
+    private String opening_date;
     private String status;
     @Nullable
-    private Date treatment_start;
+    private String treatment_start;
 
-    public Problem(String id, String type, String description, Date opening_date, String status, Date treatment_start) {
+    public Problem(String id, String type, String description, String opening_date, String status, String treatment_start) {
         this.id = id;
         this.type = type;
         this.description = description;
@@ -47,11 +47,11 @@ public class Problem {
         this.description = description;
     }
 
-    public Date getOpening_date() {
+    public String getOpening_date() {
         return opening_date;
     }
 
-    public void setOpening_date(Date opening_date) {
+    public void setOpening_date(String opening_date) {
         this.opening_date = opening_date;
     }
 
@@ -63,11 +63,11 @@ public class Problem {
         this.status = status;
     }
 
-    public Date getTreatment_start() {
+    public String getTreatment_start() {
         return treatment_start;
     }
 
-    public void setTreatment_start(Date treatment_start) {
+    public void setTreatment_start(String treatment_start) {
         this.treatment_start = treatment_start;
     }
 
