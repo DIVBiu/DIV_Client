@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.managementapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -17,6 +17,15 @@
         android:theme="@style/Theme.ManagementApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".CreateSurvey"
+            android:exported="false" />
+        <activity
+            android:name=".PendingCars"
+            android:exported="false" />
+        <activity
+            android:name=".PendingTenants"
+            android:exported="false" />
         <activity
             android:name=".ParkingScreen"
             android:exported="false" />
@@ -56,6 +65,9 @@
         <activity
             android:name=".Register"
             android:exported="false" />
-    </application>  
+        <activity
+            android:name=".MainMenuAdmin"
+            android:exported="false" />
+    </application>
 
 </manifest>

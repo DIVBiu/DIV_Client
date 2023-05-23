@@ -1,0 +1,55 @@
+<!-- survey_creation_activity.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Survey Title -->
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter survey title" />
+
+    <!-- Survey Question -->
+    <EditText
+        android:id="@+id/editTextQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter survey question" />
+
+    <!-- Survey Deadline -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deadline:" />
+
+    <DatePicker
+        android:id="@+id/datePickerDeadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"/>
+
+    <!-- Voting Options -->
+    <LinearLayout
+        android:id="@+id/optionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <!-- Add Option Button -->
+    <Button
+        android:id="@+id/buttonAddOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Option" />
+
+    <!-- Create Survey Button -->
+    <Button
+        android:id="@+id/buttonCreateSurvey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Survey" />
+
+</LinearLayout>

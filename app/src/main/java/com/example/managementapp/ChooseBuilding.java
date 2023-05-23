@@ -8,8 +8,11 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +20,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -38,11 +45,15 @@ import okhttp3.Response;
 public class ChooseBuilding extends AppCompatActivity {
     private ListView lvBuildings;
     //List<String> buildings = new ArrayList<String>();
-    private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/get_buildings_by_user?email=%s";
-
+    private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/users/get_buildings_by_user?email=%s";
+    private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
     List<String> buildings = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
+    private List<String> buildingList = new ArrayList<>();
     private String my_email;
+    private RadioGroup radio_group;
+    private RadioButton radio_button_tenant, radio_button_admin;
+    private boolean userSelect;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -59,10 +70,50 @@ public class ChooseBuilding extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = adapter.getItem(position);
-                Intent intent = new Intent(ChooseBuilding.this, MainMenu.class);
-                intent.putExtra("building", selectedItem);
-                intent.putExtra("email", my_email);
-                startActivity(intent);
+
+                URL url = null;
+                try {
+                    url = new URL(String.format(SERVER_URL2, my_email, selectedItem));
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder().url(url).build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.code() == 201) {
+                            //String responseBody = response.body().string();
+                            //Map<String,String> answer = jsonToMap(responseBody);
+                            Intent intent = new Intent(ChooseBuilding.this, MainMenuAdmin.class);
+                            intent.putExtra("email", my_email);
+                            intent.putExtra("building", selectedItem);
+                            //intent.putStringArrayListExtra("buildings", buildings);
+                            startActivity(intent);
+                            // Handle the response body here
+                        } else if(response.code() == 200){
+                            Intent intent = new Intent(ChooseBuilding.this, MainMenu.class);
+                            intent.putExtra("email", my_email);
+                            intent.putExtra("building", selectedItem);
+                            //intent.putStringArrayListExtra("buildings", buildings);
+                            startActivity(intent);
+                        }
+                        else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(ChooseBuilding.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
+                                    onResume();
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
 
@@ -90,7 +141,18 @@ public class ChooseBuilding extends AppCompatActivity {
                     Gson gson = new Gson();
                     Type listType = new TypeToken<List<String>>() {
                     }.getType();
-                    List<String> buildingList = gson.fromJson(jsonResponse, listType);
+                    JSONObject jsonObject;
+                    try {
+                        jsonObject = new JSONObject(jsonResponse);
+                        JSONArray buildingsArray = jsonObject.getJSONArray("buildings");
+                        for (int i = 0; i < buildingsArray.length(); i++) {
+                            String building = buildingsArray.getString(i);
+                            buildingList.add(building);
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    //List<String> buildingList = gson.fromJson(jsonResponse, listType);
                     ArrayList<String> list = new ArrayList<>(buildingList);
                     buildings = list;
                     runOnUiThread(new Runnable() {
@@ -118,30 +180,46 @@ public class ChooseBuilding extends AppCompatActivity {
         final Dialog dialog = new Dialog(ChooseBuilding.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_add_building);
+        dialog.setContentView(R.layout.activity_building);
 
         final EditText contact_username = dialog.findViewById(R.id.contact_username);
         //final EditText contact_name = dialog.findViewById(R.id.contact_nickname);
         //final EditText contact_server = dialog.findViewById(R.id.contact_server);
+        RadioButton radioButton_tenant = dialog.findViewById(R.id.tenantRadioButton);
+        RadioButton radioButton_admin = dialog.findViewById(R.id.committeeRadioButton);
         Button add_contact_submitBtn = dialog.findViewById(R.id.add_contact_submitBtn);
+
         add_contact_submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String address = contact_username.getText().toString();
                 if (address.isEmpty()) {
                     Toast.makeText(ChooseBuilding.this, "One of the fields is empty", Toast.LENGTH_SHORT).show();
                 } else {
                     URL url = null;
-                    try {
-                        url = new URL(String.format("http://"+ GetIP.getIPAddress()+":5000/buildings/add_tenant_to_building?email=%s&address=%s", my_email, address));
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
+                    if (radioButton_tenant.isChecked()) {
+                        try {
+                            url = new URL(String.format("http://" + GetIP.getIPAddress() + ":5000/buildings/add_tenant_to_building?email=%s&address=%s", my_email, address));
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else if (radioButton_admin.isChecked()) {
+                        try {
+                            url = new URL(String.format("http://" + GetIP.getIPAddress() + ":5000/buildings/new_building?email=%s&address=%s", my_email, address));
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        Toast.makeText(ChooseBuilding.this, "Please Choose Your Type", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("email", my_email)
                             .addFormDataPart("address", address)
                             .build();
+                    assert url != null;
                     Request request = new Request.Builder()
                             .url(url)
                             .put(requestBody)
@@ -155,7 +233,7 @@ public class ChooseBuilding extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.code() == 200) {
+                            if (response.code() == 200 || response.code() == 201) {
                                 get_building(my_email);
                                 dialog.dismiss();
                             } else {
@@ -181,7 +259,6 @@ public class ChooseBuilding extends AppCompatActivity {
                         }
                     });
                 }
-
             }
         });
         dialog.show();

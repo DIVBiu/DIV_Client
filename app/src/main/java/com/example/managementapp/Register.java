@@ -3,6 +3,8 @@ package com.example.managementapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,12 +30,16 @@ public class Register extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_register);
         email = findViewById(R.id.email);
         full_name = findViewById(R.id.full_name);
         password = findViewById(R.id.Password);
         password2 = findViewById(R.id.Password2);
         register = findViewById(R.id.signup_btn);
+        TextView to_login = findViewById(R.id.to_login);
         register.setOnClickListener(v -> {
             if (!password.getText().toString().equals(password2.getText().toString())) {
                 Toast.makeText(Register.this, "The passwords do not match", Toast.LENGTH_SHORT).show();
@@ -46,6 +52,10 @@ public class Register extends AppCompatActivity {
                 }
             }
             Log.i("SignUpPage", "onCreate");
+        });
+        to_login.setOnClickListener(v -> {
+            Intent intent = new Intent(Register.this, LoginPage.class);
+            startActivity(intent);
         });
     }
 
@@ -95,7 +105,6 @@ public class Register extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-
                 e.printStackTrace();
             }
 

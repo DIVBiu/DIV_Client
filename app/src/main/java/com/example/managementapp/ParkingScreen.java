@@ -98,6 +98,7 @@ public class ParkingScreen extends AppCompatActivity {
             public void onClick(View v) {
                 // Implement submitting data to the Flask server
                 String carNumber = carNumberEditText.getText().toString();
+
                 Bitmap carNumberImage = ((BitmapDrawable) carNumberImageView.getDrawable()).getBitmap();
                 try {
                     sendDataToServer(carNumber, carNumberImage);
