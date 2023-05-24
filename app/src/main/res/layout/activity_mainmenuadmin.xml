@@ -25,13 +25,12 @@
         app:drawableLeftCompat="@drawable/ic_online" />
 
 
-
     <Button
         android:id="@+id/chatBtnAdmin"
         android:layout_width="213dp"
         android:layout_height="52dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="52dp"
         android:backgroundTint="#FF039BE5"
         android:text="@string/chat"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,10 +40,21 @@
         android:id="@+id/problemBtnAdmin"
         android:layout_width="213dp"
         android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="132dp"
         android:backgroundTint="#FF039BE5"
         android:text="@string/problem"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/updateProblemBtnAdmin"
+        android:layout_width="213dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="208dp"
+        android:backgroundTint="#FF039BE5"
+        android:text="Update Problem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

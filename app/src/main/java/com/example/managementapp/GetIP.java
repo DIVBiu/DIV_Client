@@ -16,6 +16,7 @@ public class GetIP {
                     if (!addr.isLoopbackAddress() && addr instanceof Inet4Address) {
                         //return addr.getHostAddress();
                         return "172.20.10.2";
+                        //return "172.20.10.2";
                     }
                 }
             }

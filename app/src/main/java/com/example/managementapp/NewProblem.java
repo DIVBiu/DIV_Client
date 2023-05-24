@@ -1,14 +1,22 @@
 package com.example.managementapp;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +27,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,13 +47,20 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class NewProblem extends AppCompatActivity {
+    private static final int PICK_IMAGE_REQUEST = 1;
+
+    private static final int REQUEST_PERMISSION_CAMERA = 2;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
+    private ImageView carNumberImage;
+    private Button selectImageButton,takePhotoButton;
+    private Bitmap photoBitmap;
     private Spinner mySpinner;
     private Button submit;
     private EditText description;
     private int chosen_problem ;
-    private String content,my_email,address, Date;
+    private String content,my_email,address, Date, encodedImage;
 
-    private static final String SERVER_URL = "http://"+ GetIP.getIPAddress()+":5000/building/new_problem?address=%s&email=%s&type=%s&description=%s&date=%s";
+    private static final String SERVER_URL = "http://"+ GetIP.getIPAddress()+":5000/building/new_problem";
     String[] options = {"","Electricity", "Plumbing", "infrastructure", "Construction", "Other"};
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +74,44 @@ public class NewProblem extends AppCompatActivity {
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(NewProblem.this, android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(adapter);
+        selectImageButton = findViewById(R.id.selectImg);
+        takePhotoButton = findViewById(R.id.takePhoto);
+        carNumberImage = findViewById(R.id.carNumberImageV);
+
+        if (ContextCompat.checkSelfPermission(NewProblem.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(NewProblem.this, new String[]{
+                    Manifest.permission.CAMERA
+            }, 100);
+        }
+        selectImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Implement image selection from gallery
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+
+                // Start the gallery app and wait for a result
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            }
+        });
+        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, PICK_IMAGE_REQUEST);
+            }
+        });
         submit.setOnClickListener(v -> {
+            try {
+                //photoBitmap = ((BitmapDrawable) carNumberImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            }
+            catch (Exception e){
+                photoBitmap = null;
+            }
             URL url = null;
             content = description.getText().toString();
             if (content.isEmpty() || chosen_problem == 0){
@@ -80,6 +135,7 @@ public class NewProblem extends AppCompatActivity {
                         .addFormDataPart("description", content)
                         .addFormDataPart("type", String.valueOf(chosen_problem))
                         .addFormDataPart("date", Date)
+                        .addFormDataPart("image", encodedImage)
                         .build();
                 Request request = new Request.Builder()
                         .url(url)
@@ -127,9 +183,24 @@ public class NewProblem extends AppCompatActivity {
 
             }
         });
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                photoBitmap = (Bitmap) extras.get("data");
+                // Get the URI of the selected image
+                Uri imageUri = data.getData();
+
+                // Use the image URI to load the selected image
+                carNumberImage.setImageURI(imageUri);
+            }
+        }
+    }
     void showCustomDialog() {
         final Dialog dialog = new Dialog(NewProblem.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

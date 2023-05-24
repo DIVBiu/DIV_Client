@@ -59,9 +59,9 @@ public class ParkingScreen extends AppCompatActivity {
         carNumberEditText = findViewById(R.id.carNumberEditText);
         carNumberImageView = findViewById(R.id.carNumberImageView);
         selectImageButton = findViewById(R.id.selectImageButton);
+        takePhotoButton = findViewById(R.id.takePhotoButton);
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
-        takePhotoButton = findViewById(R.id.takePhotoButton);
         submitButton = findViewById(R.id.submitButton);
         if (ContextCompat.checkSelfPermission(ParkingScreen.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(ParkingScreen.this, new String[]{
@@ -98,7 +98,6 @@ public class ParkingScreen extends AppCompatActivity {
             public void onClick(View v) {
                 // Implement submitting data to the Flask server
                 String carNumber = carNumberEditText.getText().toString();
-
                 Bitmap carNumberImage = ((BitmapDrawable) carNumberImageView.getDrawable()).getBitmap();
                 try {
                     sendDataToServer(carNumber, carNumberImage);

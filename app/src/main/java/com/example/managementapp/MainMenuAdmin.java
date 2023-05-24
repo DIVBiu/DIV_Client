@@ -23,10 +23,17 @@ public class MainMenuAdmin extends AppCompatActivity {
         Button answer_survey_btn = findViewById(R.id.surveyBtnAdmin);
         Button parking_btn = findViewById(R.id.parkingBtnAdmin);
         Button create_survey = findViewById(R.id.createSurveyAdmin);
+        Button update_problem = findViewById(R.id.updateProblemBtnAdmin);
         Button pending_cars = findViewById(R.id.pendingCars);
         Button pending_tenants = findViewById(R.id.pendingTenants);
         parking_btn.setOnClickListener(c -> {
             Intent intent = new Intent(MainMenuAdmin.this, ParkingScreen.class);
+            intent.putExtra("building", BuildingID);
+            intent.putExtra("email", my_email);
+            startActivity(intent);
+        });
+        update_problem.setOnClickListener(v -> {
+            Intent intent = new Intent(MainMenuAdmin.this, ProblemList.class);
             intent.putExtra("building", BuildingID);
             intent.putExtra("email", my_email);
             startActivity(intent);

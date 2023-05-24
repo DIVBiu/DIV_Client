@@ -18,6 +18,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ProblemDetails"
+            android:exported="false" />
+        <activity
+            android:name=".ProblemList"
+            android:exported="false" />
+        <activity
             android:name=".CreateSurvey"
             android:exported="false" />
         <activity

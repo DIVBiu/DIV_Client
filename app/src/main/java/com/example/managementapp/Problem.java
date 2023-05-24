@@ -1,5 +1,6 @@
 package com.example.managementapp;
 
+
 import androidx.annotation.Nullable;
 
 import java.util.Date;
@@ -12,15 +13,21 @@ public class Problem {
     private String opening_date;
     private String status;
     @Nullable
+    private String problem_creator_email;
+    @Nullable
     private String treatment_start;
+    private String image;
 
-    public Problem(String id, String type, String description, String opening_date, String status, String treatment_start) {
+
+    public Problem(String id, String type, String description, @Nullable String opening_date, String status, @Nullable String problem_creator_email, @Nullable String treatment_start, String image) {
         this.id = id;
         this.type = type;
         this.description = description;
         this.opening_date = opening_date;
         this.status = status;
+        this.problem_creator_email = problem_creator_email;
         this.treatment_start = treatment_start;
+        this.image = image;
     }
 
     public String getId() {
@@ -47,11 +54,12 @@ public class Problem {
         this.description = description;
     }
 
+    @Nullable
     public String getOpening_date() {
         return opening_date;
     }
 
-    public void setOpening_date(String opening_date) {
+    public void setOpening_date(@Nullable String opening_date) {
         this.opening_date = opening_date;
     }
 
@@ -63,22 +71,43 @@ public class Problem {
         this.status = status;
     }
 
+    @Nullable
+    public String getProblem_creator_email() {
+        return problem_creator_email;
+    }
+
+    public void setProblem_creator_email(@Nullable String problem_creator_email) {
+        this.problem_creator_email = problem_creator_email;
+    }
+
+    @Nullable
     public String getTreatment_start() {
         return treatment_start;
     }
 
-    public void setTreatment_start(String treatment_start) {
+    public void setTreatment_start(@Nullable String treatment_start) {
         this.treatment_start = treatment_start;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
     public String toString() {
         return "Problem{" +
-                "type='" + type + '\'' +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
                 ", description='" + description + '\'' +
-                ", opening_date=" + opening_date +
+                ", opening_date='" + opening_date + '\'' +
                 ", status='" + status + '\'' +
-                ", treatment_start=" + treatment_start +
+                ", problem_creator_email='" + problem_creator_email + '\'' +
+                ", treatment_start='" + treatment_start + '\'' +
+                ", image=" + image +
                 '}';
     }
 }
