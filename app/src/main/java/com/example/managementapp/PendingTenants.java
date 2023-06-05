@@ -177,14 +177,31 @@ public class PendingTenants extends AppCompatActivity {
                     Gson gson = new Gson();
                     Type listType = new TypeToken<List<String>>() {
                     }.getType();
-                    tenants.addAll(convertJsonTenants(jsonResponse));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tenants.addAll(convertJsonTenants(jsonResponse));
+                            adapter.notifyDataSetChanged();
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+                    });
+
                 } else {
-                    // Handle unsuccessful response
-                    Toast.makeText(PendingTenants.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                    onResume();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Handle unsuccessful response
+                            Toast.makeText(PendingTenants.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
+                            onResume();
+                        }
+                    });
                 }
             }
         });
     }
-
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        recyclerView.setVisibility(View.VISIBLE);
+    }
 }

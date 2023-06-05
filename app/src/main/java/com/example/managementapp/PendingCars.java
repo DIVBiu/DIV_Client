@@ -68,7 +68,6 @@ public class PendingCars extends AppCompatActivity implements CarAdapter.OnItemC
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -107,23 +106,39 @@ public class PendingCars extends AppCompatActivity implements CarAdapter.OnItemC
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String jsonResponse = response.body().string();
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(jsonResponse);
-                        answer = jsonObject.getString("answer");
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String jsonResponse = null;
+                            try {
+                                jsonResponse = response.body().string();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            JSONObject jsonObject = null;
+                            try {
+                                jsonObject = new JSONObject(jsonResponse);
+                                answer = jsonObject.getString("answer");
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Gson gson = new Gson();
+                            Type listType = new TypeToken<List<String>>() {
+                            }.getType();
+                            messageTextView.setText(tenant_name + " has already " + answer + " cars on this building, are you sure you want to approve this car?");
 
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<String>>() {
-                    }.getType();
-                    messageTextView.setText(tenant_name + " has already " + answer + " cars on this building, are you sure you want to approve this car?");
+                        }
+                    });
                 } else {
                     // Handle unsuccessful response
-                    Toast.makeText(PendingCars.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                    onResume();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(PendingCars.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
+                            onResume();
+                        }
+                    });
+
                 }
             }
         });
@@ -254,20 +269,33 @@ public class PendingCars extends AppCompatActivity implements CarAdapter.OnItemC
                     Gson gson = new Gson();
                     Type listType = new TypeToken<List<String>>() {
                     }.getType();
-                    cars.addAll(convertJsonCars(jsonResponse));
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            cars.addAll(convertJsonCars(jsonResponse));
+                            adapter.notifyDataSetChanged();
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+                    });
+
                 } else {
                     // Handle unsuccessful response
-                    Toast.makeText(PendingCars.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                    onResume();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onResume();
+                        }
+                    });
                 }
             }
         });
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        adapter.notifyDataSetChanged();
-//        recyclerView.setVisibility(View.VISIBLE);
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        recyclerView.setVisibility(View.VISIBLE);
+    }
 }

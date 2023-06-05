@@ -41,12 +41,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ParkingScreen extends AppCompatActivity {
-    private Bitmap bitmap;
+    private Bitmap photoBitmap;
+    private Response resp;
     private EditText carNumberEditText;
     private ImageView carNumberImageView;
     private Button selectImageButton, takePhotoButton, submitButton;
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/cars/new_car";
-    private String address, my_email;
+    private String address, my_email, encodedImage;
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
@@ -74,9 +75,10 @@ public class ParkingScreen extends AppCompatActivity {
                 // Implement image selection from gallery
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
                 // Start the gallery app and wait for a result
-                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                //startActivityForResult(intent, PICK_IMAGE_REQUEST);
 //                Intent intent = new Intent();
 //                intent.setType("image/*");
 //                intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -98,9 +100,20 @@ public class ParkingScreen extends AppCompatActivity {
             public void onClick(View v) {
                 // Implement submitting data to the Flask server
                 String carNumber = carNumberEditText.getText().toString();
-                Bitmap carNumberImage = ((BitmapDrawable) carNumberImageView.getDrawable()).getBitmap();
+//                Bitmap carNumberImage = ((BitmapDrawable) carNumberImageView.getDrawable()).getBitmap();
                 try {
-                    sendDataToServer(carNumber, carNumberImage);
+                    //photoBitmap = ((BitmapDrawable) carNumberImage.getDrawable()).getBitmap();
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    byte[] byteArray = byteArrayOutputStream.toByteArray();
+                    encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                }
+                catch (Exception e){
+                    photoBitmap = null;
+                    encodedImage = "";
+                }
+                try {
+                    sendDataToServer(carNumber, encodedImage);
                 } catch (MalformedURLException e) {
                     throw new RuntimeException(e);
                 }
@@ -126,14 +139,17 @@ public class ParkingScreen extends AppCompatActivity {
     }
 
     // onActivityResult and other required methods for handling image selection and camera capture go here.
-    private void sendDataToServer(String carNumber, Bitmap carNumberImage) throws MalformedURLException {
-
+    private void sendDataToServer(String carNumber, String encodedImage) throws MalformedURLException {
+        if (carNumber.equals("") && encodedImage.equals("")){
+            Toast.makeText(ParkingScreen.this, "Please enter a car number or a photo of a car number",Toast.LENGTH_LONG).show();
+            return;
+        }
         int flag = 0;
         String sending_number;
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        carNumberImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        carNumberImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//        byte[] byteArray = byteArrayOutputStream.toByteArray();
+//        String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
         if (!carNumber.equals("")) {
             flag = 0;
             sending_number = carNumber;
@@ -166,16 +182,30 @@ public class ParkingScreen extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
-                    Log.d("YESSSSS", responseBody);
-
+                    resp = response;
+//                    Toast.makeText(ParkingScreen.this, "Your car number has been added successfully",Toast.LENGTH_LONG).show();
                     // Handle the response body here
                 } else {
+                    resp = response;
                     // Handle unsuccessful response
                     //Toast.makeText(ParkingScreen.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
                     //onResume();
                 }
             }
         });
+        if (resp != null) {
+            if (resp.code() == 200) {
+                Toast.makeText(ParkingScreen.this, "Your car number has been submitted and waiting for an admin approval", Toast.LENGTH_LONG).show();
+            }
+            if (resp.code() == 201) {
+                Toast.makeText(ParkingScreen.this, "Your car number has been added successfully", Toast.LENGTH_LONG).show();
+            }
+            if (resp.code() == 500) {
+                Toast.makeText(ParkingScreen.this, "This car has already been added", Toast.LENGTH_LONG).show();
+            }
+            carNumberEditText.setText("");
+            carNumberImageView.setImageBitmap(null);
+        }
     }
 
 

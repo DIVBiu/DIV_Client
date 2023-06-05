@@ -102,33 +102,6 @@ public class ProblemStatus extends AppCompatActivity {
         });
     }
 
-    // Custom adapter to display the data
-//    private class MyAdapter extends ArrayAdapter<Problem> {
-//        private final List<Problem> mData;
-//
-//        public MyAdapter(List<Problem> data) {
-//            super(ProblemStatus.this, R.layout.problem_list_item_layout, data);
-//            mData = data;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            if (convertView == null) {
-//                convertView = getLayoutInflater().inflate(R.layout.problem_list_item_layout, parent, false);
-//            }
-//            TextView titleView = convertView.findViewById(R.id.item_title);
-//            TextView descView = convertView.findViewById(R.id.item_description);
-//            TextView statusView = convertView.findViewById(R.id.item_status);
-//
-//            Problem item = mData.get(position);
-//            titleView.setText(item.getType());
-//            descView.setText(item.getDescription());
-//            statusView.setText(item.getStatus());
-//
-//            return convertView;
-//        }
-//    }
-
     @Override
     protected void onStart() {
         super.onStart();

@@ -59,9 +59,14 @@ public class ProblemDetails extends AppCompatActivity {
         textType.setText(problemType);
         textOpeningDate.setText(openingDate);
         textDescription.setText(description);
-        byte[] decodedBytes = Base64.decode(img, Base64.DEFAULT);
-        Bitmap b = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-        image.setImageBitmap(b);
+        if(!img.equals("")) {
+            byte[] decodedBytes = Base64.decode(img, Base64.DEFAULT);
+            Bitmap b = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+            image.setImageBitmap(b);
+        }
+        else {
+            image.setImageBitmap(null);
+        }
         // Set the initial status
         status = getIntent().getStringExtra("status");
 

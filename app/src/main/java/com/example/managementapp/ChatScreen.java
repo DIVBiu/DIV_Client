@@ -759,6 +759,7 @@ public class ChatScreen extends AppCompatActivity {
             }
             input.setText("");
         });
+        get_messages(BuildingID);
     }
 
     private static final SimpleDateFormat dateFormat =
@@ -791,18 +792,27 @@ public class ChatScreen extends AppCompatActivity {
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    for (Message m :messages){
-                        messages.remove(m);
-                    }
-                    messages.clear();
-                    String jsonResponse = response.body().string();
-                    messages.addAll(convertJsonToMessages(jsonResponse));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            messages.clear();
+                            String jsonResponse = null;
+                            try {
+                                jsonResponse = response.body().string();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            messages.addAll(convertJsonToMessages(jsonResponse));
+                            chatAdapter.notifyDataSetChanged();
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+                    });
+
                 } else {
                     System.out.println("connection failed in get message");
                 }
             }
         });
-
     }
     // Instantiate the RequestQueue.
     public void new_message(String content) throws MalformedURLException {
@@ -839,9 +849,6 @@ public class ChatScreen extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-//                    for(Message m : messages){
-//                        messages.remove(m);
-//                    }
                     messages.clear();
                     URL url = null;
                     try {
@@ -861,10 +868,16 @@ public class ChatScreen extends AppCompatActivity {
                         public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
                             if (response.isSuccessful()) {
                                 String jsonResponse = response.body().string();
-                                messages.addAll(convertJsonToMessages(jsonResponse));
                                 //onResume();
-                                chatAdapter.notifyDataSetChanged();
-                                recyclerView.setVisibility(View.VISIBLE);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        messages.addAll(convertJsonToMessages(jsonResponse));
+                                        chatAdapter.notifyDataSetChanged();
+                                        recyclerView.setVisibility(View.VISIBLE);
+                                    }
+                                });
+
                             } else {
                                 System.out.println("connection failed in the new msg");
                             }
@@ -884,9 +897,6 @@ public class ChatScreen extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        //messages.clear();
-        get_messages(BuildingID);
         Log.i("ChatScreen", "onResume");
         chatAdapter.notifyDataSetChanged();
         recyclerView.setVisibility(View.VISIBLE);

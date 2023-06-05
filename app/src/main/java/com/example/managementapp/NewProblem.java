@@ -61,6 +61,7 @@ public class NewProblem extends AppCompatActivity {
     private String content,my_email,address, Date, encodedImage;
 
     private static final String SERVER_URL = "http://"+ GetIP.getIPAddress()+":5000/building/new_problem";
+    private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
     String[] options = {"","Electricity", "Plumbing", "infrastructure", "Construction", "Other"};
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +112,7 @@ public class NewProblem extends AppCompatActivity {
             }
             catch (Exception e){
                 photoBitmap = null;
+                encodedImage="";
             }
             URL url = null;
             content = description.getText().toString();
@@ -175,7 +177,6 @@ public class NewProblem extends AppCompatActivity {
                 String value = parent.getItemAtPosition(position).toString();
                 chosen_problem = position;
                 Toast.makeText(NewProblem.this, value,Toast.LENGTH_LONG).show();
-
             }
 
             @Override
@@ -209,10 +210,47 @@ public class NewProblem extends AppCompatActivity {
         Button ok = dialog.findViewById(R.id.confirm);
         ok.setOnClickListener(v -> {
             dialog.dismiss();
-            Intent intent = new Intent(NewProblem.this, MainMenu.class);
-            intent.putExtra("building", address);
-            intent.putExtra("email", my_email);
-            startActivity(intent);
+            URL url = null;
+            try {
+                url = new URL(String.format(SERVER_URL2, my_email, address));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.code() == 201) {
+                        //String responseBody = response.body().string();
+                        //Map<String,String> answer = jsonToMap(responseBody);
+                        Intent intent = new Intent(NewProblem.this, MainMenuAdmin.class);
+                        intent.putExtra("email", my_email);
+                        intent.putExtra("building", address);
+                        startActivity(intent);
+                        // Handle the response body here
+                    } else if(response.code() == 200){
+                        Intent intent = new Intent(NewProblem.this, MainMenu.class);
+                        intent.putExtra("email", my_email);
+                        intent.putExtra("building", address);
+                        startActivity(intent);
+                    }
+                    else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(NewProblem.this, "There was a problem with the server", Toast.LENGTH_SHORT).show();
+                                onResume();
+                            }
+                        });
+                    }
+                }
+            });
         });
         dialog.show();
     }
