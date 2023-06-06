@@ -5,7 +5,7 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@drawable/main_menu"
     tools:context=".MainMenu">
 
 
@@ -13,60 +13,56 @@
         android:id="@+id/welcome3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="80dp"
         android:gravity="center"
-        android:text="  online to:"
-        android:textColor="@color/white"
-        android:textSize="15sp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/dark_gray"
+        android:textSize="30dp"
         android:textStyle="bold"
+        app:drawableLeftCompat="@drawable/ic_online"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:drawableLeftCompat="@drawable/ic_online" />
-
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/chatBtn"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="128dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/chat"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:background="@android:color/transparent"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="172dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/problemBtn"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="204dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/problem"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="224dp"
+        android:layout_marginTop="172dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/surveyBtn"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="284dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/survey"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="56dp"
+
+        android:layout_marginTop="368dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/parkingBtn"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="364dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/parking"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="224dp"
+        android:layout_marginTop="368dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@
     <string name="login_submitBtn">Submit</string>
     <string name="signup_nickname">Nickname</string>
     <string name="dont_have_an_account_signup">Don\'t have an account? Signup</string>
-    <string name="already_have_an_account_login">Login</string>
+    <string name="already_have_an_account_login">Return to login</string>
     <string name="type_a_message">Type a message</string>
     <string name="BaseUrl">http://10.0.2.2:7261/api/</string>
     <string name="add_building">Add Building</string>

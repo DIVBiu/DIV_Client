@@ -41,8 +41,6 @@ import okhttp3.ResponseBody;
 
 public class LoginPage extends AppCompatActivity {
     private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/login?email=%s&password=%s";
-    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/login?email=%s&password=%s";
-    //private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/users/login?email=%s&password=%s";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +62,6 @@ public class LoginPage extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-//                Toast.makeText(this, "blabla", Toast.LENGTH_SHORT).show();
-//                //login(binding.loginUsername.getText().toString(), binding.loginPassword.getText().toString());
-//                Intent intent = new Intent(LoginPage.this, MainMenu.class);
-//                //intent.putExtra("username", user.getUsername());
-//                startActivity(intent);
             }
         });
         dont_have_account.setOnClickListener(v -> {

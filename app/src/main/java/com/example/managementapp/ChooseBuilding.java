@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -47,9 +48,10 @@ public class ChooseBuilding extends AppCompatActivity {
     //List<String> buildings = new ArrayList<String>();
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/users/get_buildings_by_user?email=%s";
     private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
-    List<String> buildings = new ArrayList<String>();
-    private ArrayAdapter<String> adapter;
-    private List<String> buildingList = new ArrayList<>();
+    ArrayList<String> buildings;
+    private BuildingAdapter adapter;
+
+    private final ArrayList<String> buildingList = new ArrayList<>();
     private String my_email;
     private RadioGroup radio_group;
     private RadioButton radio_button_tenant, radio_button_admin;
@@ -58,8 +60,14 @@ public class ChooseBuilding extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_choosebuilding);
         lvBuildings = findViewById(R.id.my_listview);
+        buildings = new ArrayList<>();
+        adapter = new BuildingAdapter(this, buildingList);
+        lvBuildings.setAdapter(adapter);
         my_email = getIntent().getExtras().get("email").toString();
         try {
             get_building(my_email);
@@ -138,35 +146,30 @@ public class ChooseBuilding extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<String>>() {
-                    }.getType();
+//                    Gson gson = new Gson();
+//                    Type listType = new TypeToken<List<String>>() {
+//                    }.getType();
                     JSONObject jsonObject;
                     try {
                         jsonObject = new JSONObject(jsonResponse);
                         JSONArray buildingsArray = jsonObject.getJSONArray("buildings");
+                        buildings.clear();
                         for (int i = 0; i < buildingsArray.length(); i++) {
                             String building = buildingsArray.getString(i);
-                            buildingList.add(building);
+                            buildings.add(building);
                         }
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                    //List<String> buildingList = gson.fromJson(jsonResponse, listType);
-                    ArrayList<String> list = new ArrayList<>(buildingList);
-                    buildings = list;
+                    buildingList.addAll(buildings);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
-                            lvBuildings.setAdapter(adapter);
-                            adapter.addAll(buildings);
+                            adapter.notifyDataSetChanged();
+                            lvBuildings.setVisibility(View.VISIBLE);
+
                         }
                     });
-//                    adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
-//                    lvBuildings.setAdapter(adapter);
-//                    adapter.addAll(buildings);
-
                 } else {
                     // Handle unsuccessful response
                     Toast.makeText(ChooseBuilding.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
@@ -183,8 +186,6 @@ public class ChooseBuilding extends AppCompatActivity {
         dialog.setContentView(R.layout.activity_building);
 
         final EditText contact_username = dialog.findViewById(R.id.contact_username);
-        //final EditText contact_name = dialog.findViewById(R.id.contact_nickname);
-        //final EditText contact_server = dialog.findViewById(R.id.contact_server);
         RadioButton radioButton_tenant = dialog.findViewById(R.id.tenantRadioButton);
         RadioButton radioButton_admin = dialog.findViewById(R.id.committeeRadioButton);
         Button add_contact_submitBtn = dialog.findViewById(R.id.add_contact_submitBtn);

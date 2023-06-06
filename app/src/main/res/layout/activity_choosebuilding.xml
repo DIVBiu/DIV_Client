@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@drawable/default_background"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -15,19 +15,33 @@
             android:id="@+id/title_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="My Building List"/>
+            android:textSize="30dp"
+            android:layout_marginStart="12dp"
+            android:text="My Building List:"/>
 
         <ListView
             android:id="@+id/my_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp"
+            />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addBuildingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:src="@drawable/divlogo"
+            android:layout_margin="16dp"
+            app:backgroundTint="@color/dark_gray"
+            app:elevation="6dp"
+            android:src="@drawable/ic_add"
+            app:maxImageSize="46dp"
+            app:tint="@android:color/white"
+            app:pressedTranslationZ="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

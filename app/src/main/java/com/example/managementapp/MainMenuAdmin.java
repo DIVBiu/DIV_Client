@@ -3,6 +3,8 @@ package com.example.managementapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,11 +15,14 @@ public class MainMenuAdmin extends AppCompatActivity {
     private String my_email;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         BuildingID = getIntent().getExtras().getString("building");
         my_email = getIntent().getExtras().getString("email");
         setContentView(R.layout.activity_mainmenuadmin);
         TextView welcome = findViewById(R.id.welcomeAdmin);
-        welcome.setText("admin online: " + BuildingID + " Building");
+        welcome.setText( BuildingID + " as an Admin");
         Button chat_btn = findViewById(R.id.chatBtnAdmin);
         Button new_problem_btn = findViewById(R.id.problemBtnAdmin);
         Button answer_survey_btn = findViewById(R.id.surveyBtnAdmin);

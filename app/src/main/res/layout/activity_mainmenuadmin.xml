@@ -5,7 +5,7 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@drawable/main_menu_admin"
     tools:context=".MainMenu">
 
 
@@ -13,103 +13,95 @@
         android:id="@+id/welcomeAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="68dp"
         android:gravity="center"
-        android:text="admin page:"
-        android:textColor="@color/white"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/dark_gray"
         android:textSize="15sp"
         android:textStyle="bold"
+        app:drawableLeftCompat="@drawable/ic_online"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:drawableLeftCompat="@drawable/ic_online" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/chatBtnAdmin"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="52dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/chat"
+        android:layout_width="120dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="112dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/problemBtnAdmin"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="132dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/problem"
+        android:layout_width="111dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginTop="112dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/updateProblemBtnAdmin"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="208dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="Update Problem"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="560dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/surveyBtnAdmin"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="284dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/survey"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@android:color/transparent"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="252dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/createSurveyAdmin"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="352dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="Create Survey"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="408dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/parkingBtnAdmin"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="424dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="@string/parking"
+        android:layout_width="111dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginTop="264dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/pendingTenants"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="576dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="Pending Tenants"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="204dp"
+        android:layout_marginTop="560dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/pendingCars"
-        android:layout_width="213dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="500dp"
-        android:backgroundTint="#FF039BE5"
-        android:text="Pending Cars"
+        android:layout_width="117dp"
+        android:layout_height="119dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginTop="408dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
