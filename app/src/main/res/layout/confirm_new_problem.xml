@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp">
+    android:layout_margin="16dp"
+    android:background="#E8E8E8">
 
     <TextView
         android:id="@+id/confirm_btn"
@@ -14,14 +15,15 @@
         android:textSize="24sp"
         android:textColor="@color/black"
         android:layout_marginBottom="16dp"/>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/confirm"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="OK"
-        android:textColor="@color/white"
-        android:background="@color/cardview_dark_background"
+        android:textColor="@color/teal_700"
+        android:background="@drawable/custom_button"
         />
+
 
 </LinearLayout>

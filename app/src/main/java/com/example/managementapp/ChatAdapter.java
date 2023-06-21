@@ -42,13 +42,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_SENT:
                 SentMessageViewHolder sentViewHolder = (SentMessageViewHolder) holder;
-                sentViewHolder.messageSender.setText(message.getSender());
+                //sentViewHolder.messageSender.setText(message.getSender() + ": ");
                 sentViewHolder.textMessage.setText(message.getContent());
                 sentViewHolder.textDateTime.setText(message.getDate());
                 break;
             case VIEW_TYPE_RECEIVED:
                 ReceivedMessageViewHolder receivedViewHolder = (ReceivedMessageViewHolder) holder;
-                receivedViewHolder.messageSender.setText(message.getSender());
+                receivedViewHolder.messageSender.setText(message.getSender()+ ": ");
                 receivedViewHolder.textMessage.setText(message.getContent());
                 receivedViewHolder.textDateTime.setText(message.getDate());
                 break;

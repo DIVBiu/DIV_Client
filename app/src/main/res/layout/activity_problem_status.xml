@@ -7,8 +7,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
 
         <TextView
             android:id="@+id/title_textview"
@@ -18,59 +19,35 @@
             android:text="Problem List"
             android:textSize="40dp"/>
 
-        <ListView
-            android:id="@+id/my_problem_listview"
-            android:textAlignment="center"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/problemrecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="-161dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_add"
+            app:backgroundTint="@color/dark_grey"
+            app:elevation="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-             />
+            app:maxImageSize="46dp"
+            app:pressedTranslationZ="12dp"
+            app:tint="@android:color/white"
+ />
+        </FrameLayout>
 
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-    <!-- ListView item layout -->
-
-    <!--        <RelativeLayout-->
-    <!--            android:id="@+id/list_item_layout"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:padding="16dp">-->
-
-    <!--            &lt;!&ndash; Title &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/item_title"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:textColor="#000000"-->
-    <!--                android:textAlignment="center"-->
-    <!--                android:textSize="16sp"-->
-    <!--                android:textStyle="bold" />-->
-
-    <!--            &lt;!&ndash; Description &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/item_description"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_below="@id/item_title"-->
-    <!--                android:layout_marginTop="8dp"-->
-    <!--                android:textColor="#666666"-->
-    <!--                android:textSize="14sp" />-->
-
-    <!--            &lt;!&ndash; Status &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/item_status"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_alignParentEnd="true"-->
-    <!--                android:textColor="#009900"-->
-    <!--                android:textSize="14sp" />-->
-
-    <!--        </RelativeLayout>-->

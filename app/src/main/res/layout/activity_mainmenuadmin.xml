@@ -17,7 +17,7 @@
         android:gravity="center"
         android:text=""
         android:textAlignment="center"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/dark_grey"
         android:textSize="15sp"
         android:textStyle="bold"
         app:drawableLeftCompat="@drawable/ic_online"

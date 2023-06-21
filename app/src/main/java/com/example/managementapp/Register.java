@@ -2,6 +2,8 @@ package com.example.managementapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,6 +41,12 @@ public class Register extends AppCompatActivity {
         password = findViewById(R.id.Password);
         password2 = findViewById(R.id.Password2);
         register = findViewById(R.id.signup_btn);
+        email.setSingleLine();
+        full_name.setSingleLine();
+        password.setSingleLine();
+        password2.setSingleLine();
+        password2.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         TextView to_login = findViewById(R.id.to_login);
         register.setOnClickListener(v -> {
             if (!password.getText().toString().equals(password2.getText().toString())) {

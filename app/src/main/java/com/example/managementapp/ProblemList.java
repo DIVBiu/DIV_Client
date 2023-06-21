@@ -13,6 +13,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -41,7 +43,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ProblemList extends AppCompatActivity implements ProblemAdapter.OnItemClickListener {
+public class ProblemList extends AppCompatActivity implements RecyclerViewInterface {
     private RecyclerView recyclerView;
     private List<String> categoryOptions;
     private String my_email, address, car_email, tenant_name, answer;
@@ -54,10 +56,13 @@ public class ProblemList extends AppCompatActivity implements ProblemAdapter.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_problem_list);
         recyclerView = findViewById(R.id.recyclerView);
         problems = new ArrayList<>();
-        adapter = new ProblemAdapter(problems, this);
+        adapter = new ProblemAdapter(this, problems, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         my_email = getIntent().getExtras().get("email").toString();

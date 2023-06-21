@@ -3,6 +3,8 @@ package com.example.managementapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -30,12 +32,12 @@ import okhttp3.Response;
 
 public class ChooseSurvey extends AppCompatActivity{
 
-    private ListView lvBuildings;
+    private ListView lvSurveys;
     //List<String> buildings = new ArrayList<String>();
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/get_surveys_by_building?email=%s&address=%s&client_date=%s";
 
-    List<Survey> surveys = new ArrayList<Survey>();
-    private ArrayAdapter<Survey> adapter;
+    private ArrayList<Survey> surveys = new ArrayList<>();
+    private SurveyAdapter adapter;
     private String my_email;
     private String address;
     String Date;
@@ -51,8 +53,14 @@ public class ChooseSurvey extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_choose_survey);
-        lvBuildings = findViewById(R.id.my_listview);
+        lvSurveys = findViewById(R.id.my_listview);
+        lvSurveys.setClickable(true);
+        adapter = new SurveyAdapter(this,surveys);
+        lvSurveys.setAdapter(adapter);
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
         try {
@@ -60,7 +68,7 @@ public class ChooseSurvey extends AppCompatActivity{
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        lvBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvSurveys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Survey selectedItem = adapter.getItem(position);
@@ -100,17 +108,20 @@ public class ChooseSurvey extends AppCompatActivity{
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
-                    surveys = convertJsonToSurveys(jsonResponse);
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter = new ArrayAdapter<>(ChooseSurvey.this, android.R.layout.simple_list_item_1);
-                            lvBuildings.setAdapter(adapter);
-                            adapter.addAll(surveys);
+                            surveys.clear();
+                            surveys.addAll(convertJsonToSurveys(jsonResponse));
+//                            adapter = new ArrayAdapter<>(ChooseSurvey.this, android.R.layout.simple_list_item_1);
+                            //adapter.addAll(surveys);
+                            adapter.notifyDataSetChanged();
+                            lvSurveys.setVisibility(View.VISIBLE);
                         }
                     });
 //                    adapter = new ArrayAdapter<>(ChooseSurvey2.this, android.R.layout.simple_list_item_1);
-//                    lvBuildings.setAdapter(adapter);
+//                    lvSurveys.setAdapter(adapter);
                     //adapter.addAll(surveys);
 
                 } else {

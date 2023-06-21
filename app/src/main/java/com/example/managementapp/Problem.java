@@ -1,6 +1,12 @@
 package com.example.managementapp;
 
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+
 import androidx.annotation.Nullable;
 
 import java.util.Date;
@@ -91,6 +97,27 @@ public class Problem {
 
     public String getImage() {
         return image;
+    }
+
+    public Bitmap convertToBitmap(String text, int textSize) {
+        Paint paint = new Paint();
+        paint.setTextSize(textSize);
+        paint.setColor(Color.BLACK);
+        paint.setAntiAlias(true);
+        paint.setTextAlign(Paint.Align.LEFT);
+
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        int width = bounds.width();
+        int height = bounds.height();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawText(text, bounds.left, bounds.bottom, paint);
+
+        return bitmap;
+
     }
 
     public void setImage(String image) {

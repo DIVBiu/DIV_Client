@@ -667,6 +667,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -737,6 +739,9 @@ public class ChatScreen extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_chat_screen);
         recyclerView = findViewById(R.id.chatRecyclerView);
         messages = new ArrayList<>();
@@ -748,7 +753,7 @@ public class ChatScreen extends AppCompatActivity {
         input = findViewById(R.id.inputMessage);
         content = input.getText().toString();
         building_title = findViewById(R.id.textName);
-        building_title.setText(BuildingID);
+        building_title.setText("Chat Building: " + BuildingID);
         send = findViewById(R.id.layoutSend);
         send.setOnClickListener(v -> {
             content = input.getText().toString();

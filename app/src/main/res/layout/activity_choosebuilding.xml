@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:backgroundTint="@color/dark_gray"
+            app:backgroundTint="@color/dark_grey"
             app:elevation="6dp"
             android:src="@drawable/ic_add"
             app:maxImageSize="46dp"

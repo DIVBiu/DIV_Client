@@ -52,6 +52,8 @@ public class LoginPage extends AppCompatActivity {
         Button login_submitbtn = findViewById(R.id.login_submitBtn);
         EditText loginUsername = findViewById(R.id.login_username);
         EditText loginPassword = findViewById(R.id.login_password);
+        loginUsername.setSingleLine();
+        loginPassword.setSingleLine();
         TextView dont_have_account = findViewById(R.id.alreadyHaveAccountBtn);
         login_submitbtn.setOnClickListener(v -> {
             if (loginUsername.getText().toString().isEmpty() || loginPassword.getText().toString().isEmpty()) {

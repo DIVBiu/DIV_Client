@@ -13,6 +13,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,6 +66,9 @@ public class NewProblem extends AppCompatActivity {
     String[] options = {"","Electricity", "Plumbing", "infrastructure", "Construction", "Other"};
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_new_problem);
         submit = findViewById(R.id.confirm_problem);
         mySpinner = findViewById(R.id.spinner);
@@ -78,7 +82,6 @@ public class NewProblem extends AppCompatActivity {
         selectImageButton = findViewById(R.id.selectImg);
         takePhotoButton = findViewById(R.id.takePhoto);
         carNumberImage = findViewById(R.id.carNumberImageV);
-
         if (ContextCompat.checkSelfPermission(NewProblem.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(NewProblem.this, new String[]{
                     Manifest.permission.CAMERA

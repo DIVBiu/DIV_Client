@@ -1,12 +1,16 @@
 package com.example.managementapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -30,11 +34,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class ProblemStatus extends AppCompatActivity {
+public class ProblemStatus extends AppCompatActivity implements RecyclerViewInterface{
     private String address,my_email;
-    private ListView lvProblems;
-    List<Problem> problems = new ArrayList<Problem>();
+    private RecyclerView rvProblems;
+    private ArrayList<Problem> problems, problemList;
     private ArrayAdapter<Problem> adapter;
+    private ProblemAdapter padapter;
     private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/get_problems?address=%s&email=%s";
 
 
@@ -48,11 +53,18 @@ public class ProblemStatus extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_problem_status);
         address = getIntent().getExtras().getString("building");
         my_email = getIntent().getExtras().getString("email");
-        lvProblems = findViewById(R.id.my_problem_listview);
+        rvProblems = findViewById(R.id.problemrecyclerView);
+        problems = new ArrayList<>();
         FloatingActionButton openD = findViewById(R.id.add_button);
+        padapter = new ProblemAdapter(this,problems, this);
+        rvProblems.setLayoutManager(new LinearLayoutManager(this));
+        rvProblems.setAdapter(padapter);
         openD.setOnClickListener(v -> {
             Intent intent = new Intent(ProblemStatus.this, NewProblem.class);
             intent.putExtra("building", address);
@@ -80,13 +92,18 @@ public class ProblemStatus extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
-                    problems = convertJsonToProblems(jsonResponse);
+
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter = new ArrayAdapter<>(ProblemStatus.this, android.R.layout.simple_list_item_1);
-                            lvProblems.setAdapter(adapter);
-                            adapter.addAll(problems);
+                            problems.clear();
+                            problems.addAll(convertJsonToProblems(jsonResponse));
+                            padapter.notifyDataSetChanged();
+                            rvProblems.setVisibility(View.VISIBLE);
+                            //adapter = new ArrayAdapter<>(ProblemStatus.this, R.layout.item_problem);
+                            //lvProblems.setAdapter(adapter);
+                            //adapter.addAll(problems);
                         }
                     });
 //                    adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
@@ -124,5 +141,10 @@ public class ProblemStatus extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.i("ProblemStatus", "onStop");
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
     }
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/default_background"
     android:orientation="vertical"
     tools:context=".ParkingScreen">
 
@@ -11,40 +12,61 @@
         android:id="@+id/carNumberEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter car number" />
+        android:hint="Enter car number"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="24sp" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/carNumberImageView"
-        android:layout_width="match_parent"
+
+        <ImageView
+            android:id="@+id/carNumberImageView"
+            android:layout_width="119dp"
+            android:layout_height="119dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/ic_launcher_background" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/selectImageButton"
         android:layout_height="wrap_content"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_launcher_background" />
+        android:layout_width="200dp"
+        android:textColor="@color/teal_700"
+        android:background="@drawable/custom_button"
+        android:text="Select Image" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/takePhotoButton"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_alignBottom="@+id/selectImageButton"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="-62dp"
+        android:background="@drawable/custom_button"
+        android:text="Take Photo"
 
-        <Button
-            android:id="@+id/selectImageButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Select Image" />
+        android:textColor="@color/teal_700" />
+    </RelativeLayout>
 
-        <Button
-            android:id="@+id/takePhotoButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Take Photo" />
-
-    </LinearLayout>
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submitButton"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Submit" />
+        android:layout_alignBottom="@+id/selectImageButton"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="-62dp"
+        android:background="@drawable/custom_button"
+        android:text="Submit"
+        android:textColor="@color/teal_700" />
 
 </LinearLayout>

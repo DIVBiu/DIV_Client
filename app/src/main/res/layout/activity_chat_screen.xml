@@ -14,7 +14,9 @@
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/layoutSend"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="105dp" />
 
     <View
         android:id="@+id/headerBackground"
@@ -75,14 +77,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
 
-    android:id="@+id/chatRecyclerView"
+        android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:overScrollMode="never"
         android:padding="20dp"
-        app:stackFromEnd="true"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@+id/viewBackground"
@@ -93,19 +94,17 @@
         android:id="@+id/layoutSend"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="12dp"
-        android:background="@drawable/background_chat_input"
+        android:background="@drawable/custom_chat_input"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:background="@color/gray"
+            android:layout_marginStart="0dp"
+            android:background="@drawable/custom_chat_input"
             android:padding="8dp"
             android:src="@drawable/ic_send"
             app:tint="@color/white" />
@@ -116,12 +115,12 @@
         android:id="@+id/inputMessage"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="6dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="12dp"
-        android:background="@color/gray"
+        android:background="@drawable/custom_chat_input"
         android:hint="@string/type_a_message"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
