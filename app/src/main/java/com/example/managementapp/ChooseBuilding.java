@@ -154,6 +154,7 @@ public class ChooseBuilding extends AppCompatActivity {
                         jsonObject = new JSONObject(jsonResponse);
                         JSONArray buildingsArray = jsonObject.getJSONArray("buildings");
                         buildings.clear();
+                        buildingList.clear();
                         for (int i = 0; i < buildingsArray.length(); i++) {
                             String building = buildingsArray.getString(i);
                             buildings.add(building);
@@ -242,7 +243,7 @@ public class ChooseBuilding extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(ChooseBuilding.this, "You are already a tenant in this building", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(ChooseBuilding.this, "You are already a tenant in this building or the admin needs to approve you first", Toast.LENGTH_SHORT).show();
                                             onResume();
                                         }
                                     });

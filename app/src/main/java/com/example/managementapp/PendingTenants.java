@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -36,7 +38,7 @@ import okhttp3.Response;
 import retrofit2.http.Url;
 
 public class PendingTenants extends AppCompatActivity {
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView_t;
     private String my_email, address;
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/pending_approval_tenants?address=%s";
     private static final String APPROVE_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/approve_tenant?email=%s&address=%s&ans=%s";
@@ -46,12 +48,15 @@ public class PendingTenants extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_pending_tenants);
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView_t = findViewById(R.id.recyclerView);
         tenants = new ArrayList<>();
         adapter = new TenantAdapter(tenants);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        recyclerView_t.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView_t.setAdapter(adapter);
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
         adapter.setButtonClickListener(new TenantAdapter.ButtonClickListener() {
@@ -99,7 +104,7 @@ public class PendingTenants extends AppCompatActivity {
                 });
                 tenants.remove(position);
                 adapter.notifyDataSetChanged();
-                recyclerView.setVisibility(View.VISIBLE);
+                recyclerView_t.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -142,7 +147,7 @@ public class PendingTenants extends AppCompatActivity {
                 });
                 tenants.remove(position);
                 adapter.notifyDataSetChanged();
-                recyclerView.setVisibility(View.VISIBLE);
+                recyclerView_t.setVisibility(View.VISIBLE);
             }
         });
 
@@ -182,7 +187,7 @@ public class PendingTenants extends AppCompatActivity {
                         public void run() {
                             tenants.addAll(convertJsonTenants(jsonResponse));
                             adapter.notifyDataSetChanged();
-                            recyclerView.setVisibility(View.VISIBLE);
+                            recyclerView_t.setVisibility(View.VISIBLE);
                         }
                     });
 
@@ -202,6 +207,6 @@ public class PendingTenants extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
-        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView_t.setVisibility(View.VISIBLE);
     }
 }

@@ -3,40 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/default_background">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/messageTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:paddingBottom="16dp"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:paddingBottom="16dp"/>
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/approveButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Approve"/>
+                android:background="@drawable/custom_button"
+                android:text="Approve"
+                android:textColor="@color/teal_700" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/declineButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Decline"/>
+                android:background="@drawable/custom_button"
+                android:text="Decline"
+                android:textColor="@color/teal_700" />
+
         </LinearLayout>
 
     </LinearLayout>
