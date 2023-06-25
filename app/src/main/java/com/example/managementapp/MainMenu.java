@@ -49,7 +49,7 @@ public class MainMenu extends AppCompatActivity{
             startActivity(intent2);
         });
         answer_survey_btn.setOnClickListener(t -> {
-            Intent intent = new Intent(MainMenu.this, ChooseSurvey.class);
+            Intent intent = new Intent(MainMenu.this, SurveyAnswerOrResult.class);
             intent.putExtra("building", BuildingID);
             intent.putExtra("email", my_email);
             startActivity(intent);

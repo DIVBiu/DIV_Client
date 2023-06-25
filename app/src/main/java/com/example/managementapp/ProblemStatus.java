@@ -41,7 +41,7 @@ public class ProblemStatus extends AppCompatActivity implements RecyclerViewInte
     private ArrayAdapter<Problem> adapter;
     private ProblemAdapter padapter;
     private static final String SERVER_URL = "http://"+GetIP.getIPAddress()+":5000/get_problems?address=%s&email=%s";
-
+    private TextView textEmpty;
 
     private static ArrayList<Problem> convertJsonToProblems(String json) {
         Type listType = new TypeToken<ArrayList<Problem>>() {}.getType();
@@ -61,8 +61,9 @@ public class ProblemStatus extends AppCompatActivity implements RecyclerViewInte
         my_email = getIntent().getExtras().getString("email");
         rvProblems = findViewById(R.id.problemrecyclerView);
         problems = new ArrayList<>();
+        textEmpty = findViewById(R.id.text_empty);
         FloatingActionButton openD = findViewById(R.id.add_button);
-        padapter = new ProblemAdapter(this,problems, this);
+        padapter = new ProblemAdapter(this,problems, this, textEmpty);
         rvProblems.setLayoutManager(new LinearLayoutManager(this));
         rvProblems.setAdapter(padapter);
         openD.setOnClickListener(v -> {

@@ -1,16 +1,21 @@
 package com.example.managementapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -29,9 +34,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +51,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ParkingScreen extends AppCompatActivity {
+    private static final int IMAGE_CAPTURE_CODE = 1001;
     private Bitmap photoBitmap;
     private Response resp;
     private EditText carNumberEditText;
@@ -52,7 +61,10 @@ public class ParkingScreen extends AppCompatActivity {
     private String address, my_email, encodedImage;
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 2;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
+    private static final int CAMERA_REQUEST = 100;
+    private static final int PERMISSION_CODE = 1000;
+    String cameraPermission[];
+    Uri image_uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +77,7 @@ public class ParkingScreen extends AppCompatActivity {
         carNumberImageView = findViewById(R.id.carNumberImageView);
         selectImageButton = findViewById(R.id.selectImageButton);
         takePhotoButton = findViewById(R.id.takePhotoButton);
+        cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
         submitButton = findViewById(R.id.submitButton);
@@ -93,11 +106,22 @@ public class ParkingScreen extends AppCompatActivity {
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                      String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                      requestPermissions(permission, PERMISSION_CODE);
+                    }
+                    else {
+                        openCamera();
+                    }
+
+                }
+
+////                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////                startActivityForResult(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
+
             }
         });
-
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,13 +130,12 @@ public class ParkingScreen extends AppCompatActivity {
                 String carNumber = carNumberEditText.getText().toString();
 //                Bitmap carNumberImage = ((BitmapDrawable) carNumberImageView.getDrawable()).getBitmap();
                 try {
-                    //photoBitmap = ((BitmapDrawable) carNumberImage.getDrawable()).getBitmap();
+                    photoBitmap = ((BitmapDrawable) carNumberImageView.getDrawable()).getBitmap();
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream.toByteArray();
                     encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     photoBitmap = null;
                     encodedImage = "";
                 }
@@ -125,6 +148,28 @@ public class ParkingScreen extends AppCompatActivity {
         });
     }
 
+    private void openCamera(){
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE,"New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION,"From the Camera");
+        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+        startActivityForResult(cameraIntent,IMAGE_CAPTURE_CODE);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCamera();
+                } else {
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
     // Handle the result of the camera app
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -133,19 +178,25 @@ public class ParkingScreen extends AppCompatActivity {
 //            bitmap = (Bitmap) data.getExtras().get("data");
 //            carNumberImageView.setImageBitmap(bitmap);
 //        }
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            // Get the URI of the selected image
+        if (resultCode == RESULT_OK){
             Uri imageUri = data.getData();
-
-            // Use the image URI to load the selected image
+            //Uri bitmap = (Uri) data.getExtras().get("data");
             carNumberImageView.setImageURI(imageUri);
+
         }
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+//            // Get the URI of the selected image
+//            Uri imageUri = data.getData();
+//
+//            // Use the image URI to load the selected image
+//            carNumberImageView.setImageURI(imageUri);
+//        }
     }
 
     // onActivityResult and other required methods for handling image selection and camera capture go here.
     private void sendDataToServer(String carNumber, String encodedImage) throws MalformedURLException {
-        if (carNumber.equals("") && encodedImage.equals("")){
-            Toast.makeText(ParkingScreen.this, "Please enter a car number or a photo of a car number",Toast.LENGTH_LONG).show();
+        if (carNumber.equals("") && encodedImage.equals("")) {
+            Toast.makeText(ParkingScreen.this, "Please enter a car number or a photo of a car number", Toast.LENGTH_LONG).show();
             return;
         }
         int flag = 0;

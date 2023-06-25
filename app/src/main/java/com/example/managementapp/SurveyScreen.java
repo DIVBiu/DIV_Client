@@ -138,8 +138,6 @@ public class SurveyScreen extends AppCompatActivity {
         dialog.show();
     }
 
-
-
     protected void get_survey(String survey_title){
         URL url = null;
         try {

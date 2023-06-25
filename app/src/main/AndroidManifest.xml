@@ -5,6 +5,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -18,8 +24,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ResultScreen"
+            android:exported="false" />
+        <activity
+            android:name=".SurveyResults"
+            android:exported="false" />
+        <activity
+            android:name=".SurveyAnswerOrResult"
+            android:exported="false" />
+        <activity
             android:name=".OpeningScreen"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,8 +64,7 @@
             android:exported="false" />
         <activity
             android:name=".LoginPage"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".MainMenu"
             android:exported="false" />

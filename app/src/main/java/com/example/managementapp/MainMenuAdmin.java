@@ -56,7 +56,7 @@ public class MainMenuAdmin extends AppCompatActivity {
             startActivity(intent2);
         });
         answer_survey_btn.setOnClickListener(t -> {
-            Intent intent = new Intent(MainMenuAdmin.this, ChooseSurvey.class);
+            Intent intent = new Intent(MainMenuAdmin.this, SurveyAnswerOrResult.class);
             intent.putExtra("building", BuildingID);
             intent.putExtra("email", my_email);
             startActivity(intent);

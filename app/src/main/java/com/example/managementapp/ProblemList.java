@@ -51,6 +51,8 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
     private List<Problem> problems;
     private Problem clickedProblem;
     private int position;
+    private TextView textEmpty;
+
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/get_problems_by_building?address=%s";
 
     @Override
@@ -62,7 +64,7 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
         setContentView(R.layout.activity_problem_list);
         recyclerView = findViewById(R.id.recyclerView);
         problems = new ArrayList<>();
-        adapter = new ProblemAdapter(this, problems, this);
+        adapter = new ProblemAdapter(this, problems, this, textEmpty);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         my_email = getIntent().getExtras().get("email").toString();

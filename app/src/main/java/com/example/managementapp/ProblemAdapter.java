@@ -21,14 +21,16 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
     private List<Problem> dataList;
     private List<Problem> originalList;
     private CustomFilter filter;
+    private TextView textEmpty;
     public static final int VIEW_STATUS = 1;
     public static final int VIEW_UPDATE_PROBLEM = 2;
 
-    public ProblemAdapter(Context context, List<Problem> dataList, RecyclerViewInterface recyclerViewInterface) {
+    public ProblemAdapter(Context context, List<Problem> dataList, RecyclerViewInterface recyclerViewInterface, TextView textEmpty) {
         this.context = context;
         this.dataList = dataList;
         this.originalList = dataList;
         this.recyclerViewInterface = recyclerViewInterface;
+        this.textEmpty = textEmpty;
     }
 
     @NonNull
@@ -47,8 +49,14 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
     public void updateData(List<Problem> newDataList) {
         dataList = newDataList;
         originalList = newDataList;
+        if (getItemCount() == 0) {
+            textEmpty.setVisibility(View.VISIBLE);
+        } else {
+            textEmpty.setVisibility(View.GONE);
+        }
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -86,6 +94,8 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
         public TextView opening_date_label;
         public TextView status_label;
         public ImageView problem_image;
+
+
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             problem_description = itemView.findViewById(R.id.problemDescription);
@@ -100,6 +110,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (recyclerViewInterface != null ){
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
