@@ -54,9 +54,6 @@ public class SendingMessageTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        // Wait for BuildingAActivity to load
-//        Espresso.onView(ViewMatchers.withId(R.id.listName)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
         // Click on Building A button
         Espresso.onView(ViewMatchers.withText("A"))
                 .perform(ViewActions.click());
@@ -75,9 +72,6 @@ public class SendingMessageTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        // Wait for input field to load
-        //Espresso.onView(ViewMatchers.withId(R.id.inputMessage)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
         // Enter message
         Espresso.onView(ViewMatchers.withId(R.id.inputMessage)).perform(ViewActions.typeText("Test Test"));
 
@@ -90,7 +84,6 @@ public class SendingMessageTest {
         Espresso.onView(ViewMatchers.withId(R.id.layoutSend)).perform(ViewActions.click());
 
         // Wait for message to be sent
-        // You may need to add a delay or synchronization here to ensure the message is sent and received
         try {
             Thread.sleep(6000);
         } catch (InterruptedException e) {
