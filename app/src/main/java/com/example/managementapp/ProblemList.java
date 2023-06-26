@@ -7,9 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +51,7 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
     private List<String> categoryOptions;
     private String my_email, address, car_email, tenant_name, answer;
     private ProblemAdapter adapter;
-    private List<Problem> problems;
+    private ArrayList<Problem> problems;
     private Problem clickedProblem;
     private int position;
     private TextView textEmpty;
@@ -65,8 +68,7 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
         recyclerView = findViewById(R.id.recyclerView);
         problems = new ArrayList<>();
         adapter = new ProblemAdapter(this, problems, this, textEmpty);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
 
@@ -77,7 +79,8 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
         categoryOptions.add("Infrastructure");
         categoryOptions.add("Construction");
         categoryOptions.add("Other");
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
         try {
             get_problems(address);
         } catch (MalformedURLException e) {
@@ -110,7 +113,7 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
         this.position = position;
         clickedProblem = problems.get(position);
         car_email = clickedProblem.getProblem_creator_email();
-        Intent intent = new Intent(ProblemList.this, ProblemDetails.class);
+        Intent intent = new Intent(this, ProblemDetails.class);
         intent.putExtra("type", clickedProblem.getType());
         intent.putExtra("id", clickedProblem.getId());
         intent.putExtra("address", address);
@@ -118,7 +121,10 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
         intent.putExtra("opening_date", clickedProblem.getOpening_date());
         intent.putExtra("description", clickedProblem.getDescription());
         intent.putExtra("status", clickedProblem.getStatus());
-        intent.putExtra("image", clickedProblem.getImage());
+        byte[] imageBytes = Base64.decode(clickedProblem.getImage(), Base64.DEFAULT);
+        // Decode the byte array into a Bitmap object
+
+        intent.putExtra("image", imageBytes);
         //intent.putStringArrayListExtra("buildings", buildings);
         startActivity(intent);
     }

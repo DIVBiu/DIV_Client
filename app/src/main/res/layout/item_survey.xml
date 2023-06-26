@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,7 +9,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="5dp"
+        android:background="@drawable/default_background"
         android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
@@ -26,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/dark_grey"
-                    android:textSize="23sp"
+                    android:textSize="18sp"
                     android:text="Survey Title:"
                     android:textStyle="bold" />
 
@@ -35,9 +39,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/title"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="4dp"
                     android:textColor="@color/black"
-                    android:textSize="23sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:ellipsize="end"
                     android:maxLines="1" />
@@ -47,14 +51,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                >
 
                 <TextView
                     android:id="@+id/deadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/dark_grey"
-                    android:textSize="26sp"
+                    android:textSize="18sp"
                     android:text="Deadline:"
                     android:textStyle="bold" />
 
@@ -64,8 +69,8 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/deadline"
                     android:layout_marginStart="8dp"
-                    android:textColor="@color/black"
-                    android:textSize="23sp"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:ellipsize="end"
                     android:maxLines="1" />

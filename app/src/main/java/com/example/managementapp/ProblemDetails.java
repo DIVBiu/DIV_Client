@@ -35,8 +35,8 @@ public class ProblemDetails extends AppCompatActivity {
     private TextView textOpeningDate;
     private TextView textDescription;
     private Button buttonUpdateStatus;
-    private String status, address, my_email, img;
-
+    private String status, address, my_email, id, problemType, openingDate, description;
+    private byte[] img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +46,13 @@ public class ProblemDetails extends AppCompatActivity {
         setContentView(R.layout.activity_problem_details);
 
         // Retrieve the problem details from the intent
-        String id = getIntent().getStringExtra("id");
+        id = getIntent().getStringExtra("id");
         address = getIntent().getStringExtra("address");
         my_email = getIntent().getStringExtra("email");
-        img = getIntent().getStringExtra("image");
-        String problemType = getIntent().getStringExtra("type");
-        String openingDate = getIntent().getStringExtra("opening_date");
-        String description = getIntent().getStringExtra("description");
+        img = getIntent().getByteArrayExtra("image");
+        problemType = getIntent().getStringExtra("type");
+        openingDate = getIntent().getStringExtra("opening_date");
+        description = getIntent().getStringExtra("description");
         image = findViewById(R.id.photoSquare);
         // Initialize the views
         textType = findViewById(R.id.textType);
@@ -65,9 +65,10 @@ public class ProblemDetails extends AppCompatActivity {
         textOpeningDate.setText(openingDate);
         textDescription.setText(description);
         if(!img.equals("")) {
-            byte[] decodedBytes = Base64.decode(img, Base64.DEFAULT);
-            Bitmap b = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-            image.setImageBitmap(b);
+            //byte[] imageBytes = Base64.decode(img, Base64.DEFAULT);
+            // Decode the byte array into a Bitmap object
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+            image.setImageBitmap(bitmap);
         }
         else {
             image.setImageBitmap(null);
@@ -136,5 +137,20 @@ public class ProblemDetails extends AppCompatActivity {
 
     private void updateButtonStatusText() {
         buttonUpdateStatus.setText("Update Status: " + status);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+
     }
 }

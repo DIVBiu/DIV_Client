@@ -1,6 +1,9 @@
 package com.example.managementapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHolder> {
@@ -72,11 +76,17 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
         Problem problem = dataList.get(position);
         holder.problem_description.setText(problem.getDescription());
         holder.problem_type.setText(problem.getType());
-        holder.opening_date.setText(problem.getTreatment_start());
+        holder.opening_date.setText(problem.getOpening_date());
         holder.problem_status.setText(problem.getStatus());
         holder.problem_creator.setText(problem.getProblem_creator_email());
         // dont have an image yet
-        //holder.problem_image.setImageBitmap(problem.convertToBitmap(problem.getImage(), problem.getImage().length()));
+        String image = problem.getImage();
+        if (!Objects.equals(image, "")){
+            byte[] imageBytes = Base64.decode(problem.getImage(), Base64.DEFAULT);
+            // Decode the byte array into a Bitmap object
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            holder.problem_image.setImageBitmap(bitmap);
+        }
 
     }
 
@@ -105,7 +115,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             problem_creator = itemView.findViewById(R.id.problemCreatorEmail);
             problem_image = itemView.findViewById(R.id.problemImage);
             opening_date_label = itemView.findViewById(R.id.openingDateLabel);
-            status_label = itemView.findViewById(R.id.statusLabel);
+            //status_label = itemView.findViewById(R.id.statusLabel);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -2,11 +2,13 @@ package com.example.managementapp;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -48,11 +50,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class NewProblem extends AppCompatActivity {
-    private static final int PICK_IMAGE_REQUEST = 1;
 
-    private static final int REQUEST_PERMISSION_CAMERA = 2;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
-    private ImageView carNumberImage;
+    private static final int IMAGE_CAPTURE_CODE = 100;
+    private static final int IMAGE_PICK_CODE = 200;
+    private static final int PERMISSION_CODE = 1000;
+
+    private ImageView problemImage;
     private Button selectImageButton,takePhotoButton;
     private Bitmap photoBitmap;
     private Spinner mySpinner;
@@ -61,6 +64,7 @@ public class NewProblem extends AppCompatActivity {
     private int chosen_problem ;
     private String content,my_email,address, Date, encodedImage;
 
+    Uri image_uri;
     private static final String SERVER_URL = "http://"+ GetIP.getIPAddress()+":5000/building/new_problem";
     private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
     String[] options = {"","Electricity", "Plumbing", "infrastructure", "Construction", "Other"};
@@ -81,7 +85,7 @@ public class NewProblem extends AppCompatActivity {
         mySpinner.setAdapter(adapter);
         selectImageButton = findViewById(R.id.selectImg);
         takePhotoButton = findViewById(R.id.takePhoto);
-        carNumberImage = findViewById(R.id.carNumberImageV);
+        problemImage = findViewById(R.id.carNumberImageV);
         if (ContextCompat.checkSelfPermission(NewProblem.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(NewProblem.this, new String[]{
                     Manifest.permission.CAMERA
@@ -90,24 +94,34 @@ public class NewProblem extends AppCompatActivity {
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement image selection from gallery
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-
-                // Start the gallery app and wait for a result
-                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, IMAGE_PICK_CODE);
             }
         });
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePictureIntent, PICK_IMAGE_REQUEST);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permission, PERMISSION_CODE);
+                    }
+                    else {
+                        openCamera();
+                    }
+
+                }
+
+////                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////                startActivityForResult(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
+
             }
         });
+
+
         submit.setOnClickListener(v -> {
             try {
-                //photoBitmap = ((BitmapDrawable) carNumberImage.getDrawable()).getBitmap();
+                photoBitmap = ((BitmapDrawable) problemImage.getDrawable()).getBitmap();
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -192,18 +206,23 @@ public class NewProblem extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                photoBitmap = (Bitmap) extras.get("data");
-                // Get the URI of the selected image
-                Uri imageUri = data.getData();
-
-                // Use the image URI to load the selected image
-                carNumberImage.setImageURI(imageUri);
-            }
+        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
+            // Image captured from camera
+            problemImage.setImageURI(image_uri);
+        } else if (requestCode == IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
+            // Image selected from gallery
+            Uri selectedImageUri = data.getData();
+            problemImage.setImageURI(selectedImageUri);
         }
+    }
+    private void openCamera(){
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE,"New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION,"From the Camera");
+        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+        startActivityForResult(cameraIntent,IMAGE_CAPTURE_CODE);
     }
     void showCustomDialog() {
         final Dialog dialog = new Dialog(NewProblem.this);

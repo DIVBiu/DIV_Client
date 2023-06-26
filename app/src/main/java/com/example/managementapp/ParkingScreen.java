@@ -51,7 +51,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ParkingScreen extends AppCompatActivity {
-    private static final int IMAGE_CAPTURE_CODE = 1001;
+
+    private static final int IMAGE_CAPTURE_CODE = 100;
+    private static final int IMAGE_PICK_CODE = 200;
     private Bitmap photoBitmap;
     private Response resp;
     private EditText carNumberEditText;
@@ -60,8 +62,8 @@ public class ParkingScreen extends AppCompatActivity {
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/cars/new_car";
     private String address, my_email, encodedImage;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private static final int REQUEST_IMAGE_CAPTURE = 2;
-    private static final int CAMERA_REQUEST = 100;
+    //    private static final int REQUEST_IMAGE_CAPTURE = 2;
+//    private static final int CAMERA_REQUEST = 100;
     private static final int PERMISSION_CODE = 1000;
     String cameraPermission[];
     Uri image_uri;
@@ -89,17 +91,8 @@ public class ParkingScreen extends AppCompatActivity {
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement image selection from gallery
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-                // Start the gallery app and wait for a result
-                //startActivityForResult(intent, PICK_IMAGE_REQUEST);
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, IMAGE_PICK_CODE);
             }
         });
 
@@ -108,18 +101,14 @@ public class ParkingScreen extends AppCompatActivity {
             public void onClick(View v) {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                     if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                      String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                      requestPermissions(permission, PERMISSION_CODE);
+                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permission, PERMISSION_CODE);
                     }
                     else {
                         openCamera();
                     }
 
                 }
-
-////                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////                startActivityForResult(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
-
             }
         });
 
@@ -170,28 +159,21 @@ public class ParkingScreen extends AppCompatActivity {
             }
         }
     }
-    // Handle the result of the camera app
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 100) {
-//            bitmap = (Bitmap) data.getExtras().get("data");
-//            carNumberImageView.setImageBitmap(bitmap);
-//        }
-        if (resultCode == RESULT_OK){
-            Uri imageUri = data.getData();
-            //Uri bitmap = (Uri) data.getExtras().get("data");
-            carNumberImageView.setImageURI(imageUri);
-
+        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
+            // Image captured from camera
+            carNumberImageView.setImageURI(image_uri);
+        } else if (requestCode == IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
+            // Image selected from gallery
+            Uri selectedImageUri = data.getData();
+            carNumberImageView.setImageURI(selectedImageUri);
         }
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-//            // Get the URI of the selected image
-//            Uri imageUri = data.getData();
-//
-//            // Use the image URI to load the selected image
-//            carNumberImageView.setImageURI(imageUri);
-//        }
     }
+
 
     // onActivityResult and other required methods for handling image selection and camera capture go here.
     private void sendDataToServer(String carNumber, String encodedImage) throws MalformedURLException {
@@ -201,10 +183,6 @@ public class ParkingScreen extends AppCompatActivity {
         }
         int flag = 0;
         String sending_number;
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        carNumberImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//        byte[] byteArray = byteArrayOutputStream.toByteArray();
-//        String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
         if (!carNumber.equals("")) {
             flag = 0;
             sending_number = carNumber;
@@ -238,26 +216,36 @@ public class ParkingScreen extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
                     resp = response;
-//                    Toast.makeText(ParkingScreen.this, "Your car number has been added successfully",Toast.LENGTH_LONG).show();
+                    if (resp.code() == 200) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ParkingScreen.this, "Your car number has been submitted and waiting for an admin approval", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                    else if(resp.code() == 201){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ParkingScreen.this, "Your car number has been added", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                     // Handle the response body here
                 } else {
                     resp = response;
-                    // Handle unsuccessful response
-                    //Toast.makeText(ParkingScreen.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                    //onResume();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ParkingScreen.this, "This car has already been added", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
                 }
             }
         });
         if (resp != null) {
-            if (resp.code() == 200) {
-                Toast.makeText(ParkingScreen.this, "Your car number has been submitted and waiting for an admin approval", Toast.LENGTH_LONG).show();
-            }
-            if (resp.code() == 201) {
-                Toast.makeText(ParkingScreen.this, "Your car number has been added successfully", Toast.LENGTH_LONG).show();
-            }
-            if (resp.code() == 500) {
-                Toast.makeText(ParkingScreen.this, "This car has already been added", Toast.LENGTH_LONG).show();
-            }
             carNumberEditText.setText("");
             carNumberImageView.setImageBitmap(null);
         }
