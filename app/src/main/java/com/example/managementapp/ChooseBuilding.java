@@ -48,6 +48,7 @@ public class ChooseBuilding extends AppCompatActivity {
     //List<String> buildings = new ArrayList<String>();
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/users/get_buildings_by_user?email=%s";
     private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
+    private static final String DELETE_SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/remove_tenant_from_building?email=%s&address=%s";
     ArrayList<String> buildings;
     private BuildingAdapter adapter;
 
@@ -74,6 +75,50 @@ public class ChooseBuilding extends AppCompatActivity {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+        lvBuildings.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = adapter.getItem(position);
+                URL url = null;
+                try {
+                    url = new URL(String.format(DELETE_SERVER_URL, my_email, selectedItem));
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder().url(url).build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.code() == 200) {
+                            finish();
+
+                        }
+                        else if(response.code() == 201){
+                            Intent intent = new Intent(ChooseBuilding.this, ChooseNewAdmin.class);
+                            intent.putExtra("building", selectedItem);
+                            intent.putExtra("email", my_email);
+                            startActivity(intent);
+                        }
+                        else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(ChooseBuilding.this, "Problem with server", Toast.LENGTH_SHORT).show();
+                                    onResume();
+                                }
+                            });
+                        }
+                    }
+                });
+                return true; // Return true to indicate that the long click event is consumed
+            }
+        });
         lvBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -146,9 +191,6 @@ public class ChooseBuilding extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
-//                    Gson gson = new Gson();
-//                    Type listType = new TypeToken<List<String>>() {
-//                    }.getType();
                     JSONObject jsonObject;
                     try {
                         jsonObject = new JSONObject(jsonResponse);

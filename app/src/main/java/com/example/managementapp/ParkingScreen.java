@@ -96,24 +96,6 @@ public class ParkingScreen extends AppCompatActivity {
                     Manifest.permission.CAMERA
             }, 100);
         }
-//        selectImageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Implement image selection from gallery
-////                Intent intent = new Intent(Intent.ACTION_PICK);
-////                intent.setType("image/*");
-////                intent.setAction(Intent.ACTION_GET_CONTENT);
-////                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-//                // Start the gallery app and wait for a result
-//                //startActivityForResult(intent, PICK_IMAGE_REQUEST);
-////                Intent intent = new Intent();
-////                intent.setType("image/*");
-////                intent.setAction(Intent.ACTION_GET_CONTENT);
-////                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-//                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(galleryIntent, IMAGE_PICK_CODE);
-//            }
-//        });
 
 
         selectImageButton.setOnClickListener(new View.OnClickListener() {
@@ -123,25 +105,6 @@ public class ParkingScreen extends AppCompatActivity {
             }
         });
 
-//        takePhotoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-//                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-//                      String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                      requestPermissions(permission, PERMISSION_CODE);
-//                    }
-//                    else {
-//                        openCamera();
-//                    }
-//
-//                }
-//
-//////                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//////                startActivityForResult(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
-//
-//            }
-//        });
 
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,65 +137,6 @@ public class ParkingScreen extends AppCompatActivity {
             }
         });
     }
-
-//    private void openCamera(){
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Images.Media.TITLE,"New Picture");
-//        values.put(MediaStore.Images.Media.DESCRIPTION,"From the Camera");
-//        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-//        startActivityForResult(cameraIntent,IMAGE_CAPTURE_CODE);
-//    }
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode) {
-//            case PERMISSION_CODE: {
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    openCamera();
-//                } else {
-//                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        }
-//    }
-//    // Handle the result of the camera app
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-////        if (requestCode == 100) {
-////            bitmap = (Bitmap) data.getExtras().get("data");
-////            carNumberImageView.setImageBitmap(bitmap);
-////        }
-//        if (resultCode == RESULT_OK){
-//            Uri imageUri = data.getData();
-//            //Uri bitmap = (Uri) data.getExtras().get("data");
-//            carNumberImageView.setImageURI(imageUri);
-//
-//        }
-////        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-////            // Get the URI of the selected image
-////            Uri imageUri = data.getData();
-////
-////            // Use the image URI to load the selected image
-////            carNumberImageView.setImageURI(imageUri);
-////        }
-//    }
-
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
-//            // Image captured from camera
-//            carNumberImageView.setImageURI(image_uri);
-//        } else if (requestCode == IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
-//            // Image selected from gallery
-//            Uri selectedImageUri = data.getData();
-//            carNumberImageView.setImageURI(selectedImageUri);
-//        }
-//    }
 
 
     private void openImagePicker() {
@@ -297,10 +201,6 @@ public class ParkingScreen extends AppCompatActivity {
         }
         int flag = 0;
         String sending_number;
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        carNumberImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//        byte[] byteArray = byteArrayOutputStream.toByteArray();
-//        String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
         if (!carNumber.equals("")) {
             flag = 0;
             sending_number = carNumber;
@@ -341,6 +241,11 @@ public class ParkingScreen extends AppCompatActivity {
                     // Handle unsuccessful response
                     //Toast.makeText(ParkingScreen.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
                     //onResume();
+                }
+                try {
+                    Thread.sleep(4000); // Sleep for 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 runOnUiThread(new Runnable() {
                                   @Override
