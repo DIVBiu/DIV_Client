@@ -111,16 +111,18 @@ public class SurveyScreen extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()) {
+                            if (response.code()==200) {
+//                                  finish();
                                 Intent intent = new Intent(SurveyScreen.this, MainMenu.class);
                                 intent.putExtra("email", email);
                                 intent.putExtra("building", building);
                                 startActivity(intent);
                                 // Handle the response body here
-                            } else {
-                                // Handle unsuccessful response
-                                //Toast.makeText(SurveyScreen.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                                //onResume();
+                            } else if(response.code() == 201) {
+                                Intent intent = new Intent(SurveyScreen.this, MainMenuAdmin.class);
+                                intent.putExtra("email", email);
+                                intent.putExtra("building", building);
+                                startActivity(intent);
                             }
                         }
                     });

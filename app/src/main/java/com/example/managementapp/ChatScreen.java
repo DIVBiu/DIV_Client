@@ -727,15 +727,11 @@ public class ChatScreen extends AppCompatActivity {
     private String my_email;
     private TextView building_title;
     private List<Message> messages;
-    ///private static ChatAdapter chatAdapter = new ChatAdapter(messages);
     private ChatAdapter chatAdapter;
     private RecyclerView recyclerView;
     private String content;
     String Date;
-    private String Full_name;
-    private static final String SERVER_URL = "http://"+ GetIP.getIPAddress()+":5000/users/get_name_by_email?email=%s";
     private static final String GET_BUILDING_URL = "http://"+GetIP.getIPAddress()+":5000/buildings/get_chat_by_building?address=%s&email=%s";
-    //private PreferenceManager preferenceManager;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -819,12 +815,11 @@ public class ChatScreen extends AppCompatActivity {
             }
         });
     }
-    // Instantiate the RequestQueue.
+
     public void new_message(String content) throws MalformedURLException {
 
-        //RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" +GetIP.getIPAddress() +":5000/buildings/add_message_to_chat?email=%s&address=%s&content=%s&date=%s";  // replace with your server URL
-        // Create a JSON object to represent the message data
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             LocalDate currentDate = LocalDate.now();
             Date = currentDate.toString();

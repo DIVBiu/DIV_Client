@@ -1,11 +1,13 @@
 package com.example.managementapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -22,6 +24,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +38,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -51,20 +57,24 @@ import okhttp3.Response;
 
 public class NewProblem extends AppCompatActivity {
 
-    private static final int IMAGE_CAPTURE_CODE = 100;
-    private static final int IMAGE_PICK_CODE = 200;
-    private static final int PERMISSION_CODE = 1000;
+//    private static final int IMAGE_CAPTURE_CODE = 100;
+//    private static final int IMAGE_PICK_CODE = 200;
+//    private static final int PERMISSION_CODE = 1000;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int CAMERA_PERMISSION_REQUEST = 2;
+    private static final int CAMERA_REQUEST = 3;
 
     private ImageView problemImage;
     private Button selectImageButton,takePhotoButton;
-    private Bitmap photoBitmap;
+    private Bitmap photo;
     private Spinner mySpinner;
     private Button submit;
     private EditText description;
     private int chosen_problem ;
     private String content,my_email,address, Date, encodedImage;
 
-    Uri image_uri;
+    //    Uri image_uri;
     private static final String SERVER_URL = "http://"+ GetIP.getIPAddress()+":5000/building/new_problem";
     private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
     String[] options = {"","Electricity", "Plumbing", "infrastructure", "Construction", "Other"};
@@ -91,44 +101,60 @@ public class NewProblem extends AppCompatActivity {
                     Manifest.permission.CAMERA
             }, 100);
         }
+//        selectImageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(galleryIntent, IMAGE_PICK_CODE);
+//            }
+//        });
+
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, IMAGE_PICK_CODE);
+                openImagePicker();
             }
         });
+
+
+//        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+//                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//                        requestPermissions(permission, PERMISSION_CODE);
+//                    }
+//                    else {
+//                        openCamera();
+//                    }
+//
+//                }
+//
+//////                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//////                startActivityForResult(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
+//
+//            }
+//        });
+
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                        requestPermissions(permission, PERMISSION_CODE);
-                    }
-                    else {
-                        openCamera();
-                    }
-
-                }
-
-////                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////                startActivityForResult(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
-
+                requestCameraPermission();
             }
         });
 
 
         submit.setOnClickListener(v -> {
             try {
-                photoBitmap = ((BitmapDrawable) problemImage.getDrawable()).getBitmap();
+                //photoBitmap = ((BitmapDrawable) carNumberImage.getDrawable()).getBitmap();
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream.toByteArray();
                 encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
             }
             catch (Exception e){
-                photoBitmap = null;
+                photo = null;
                 encodedImage="";
             }
             URL url = null;
@@ -203,27 +229,82 @@ public class NewProblem extends AppCompatActivity {
         });
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
+//            // Image captured from camera
+//            problemImage.setImageURI(image_uri);
+//        } else if (requestCode == IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
+//            // Image selected from gallery
+//            Uri selectedImageUri = data.getData();
+//            problemImage.setImageURI(selectedImageUri);
+//        }
+//    }
+//    private void openCamera(){
+//        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Images.Media.TITLE,"New Picture");
+//        values.put(MediaStore.Images.Media.DESCRIPTION,"From the Camera");
+//        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+//        startActivityForResult(cameraIntent,IMAGE_CAPTURE_CODE);
+//    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+    }
+
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST);
+        } else {
+            openCamera();
+        }
+    }
+
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
-            // Image captured from camera
-            problemImage.setImageURI(image_uri);
-        } else if (requestCode == IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
-            // Image selected from gallery
-            Uri selectedImageUri = data.getData();
-            problemImage.setImageURI(selectedImageUri);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                photo = BitmapFactory.decodeStream(inputStream);
+                problemImage.setImageBitmap(photo);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            photo = (Bitmap) data.getExtras().get("data");
+            problemImage.setImageBitmap(photo);
         }
     }
-    private void openCamera(){
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE,"New Picture");
-        values.put(MediaStore.Images.Media.DESCRIPTION,"From the Camera");
-        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-        startActivityForResult(cameraIntent,IMAGE_CAPTURE_CODE);
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CAMERA_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+
     void showCustomDialog() {
         final Dialog dialog = new Dialog(NewProblem.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
