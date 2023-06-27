@@ -238,6 +238,13 @@ public class ChooseBuilding extends AppCompatActivity {
                             if (response.code() == 200 || response.code() == 201) {
                                 get_building(my_email);
                                 dialog.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ChooseBuilding.this, "Your choice has been added successfully", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
                             } else {
                                 if (response.code() == 500) {
                                     runOnUiThread(new Runnable() {

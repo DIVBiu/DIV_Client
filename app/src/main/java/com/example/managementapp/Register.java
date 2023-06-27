@@ -50,7 +50,11 @@ public class Register extends AppCompatActivity {
         TextView to_login = findViewById(R.id.to_login);
         register.setOnClickListener(v -> {
             if (!password.getText().toString().equals(password2.getText().toString())) {
-                Toast.makeText(Register.this, "The passwords do not match", Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(Register.this, "The passwords do not match", Toast.LENGTH_SHORT).show();
+                    }});
             }
             else{
                 try {
