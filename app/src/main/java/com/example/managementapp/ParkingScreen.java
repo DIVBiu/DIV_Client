@@ -123,6 +123,7 @@ public class ParkingScreen extends AppCompatActivity {
                 }
                 try {
                     sendDataToServer(carNumber, encodedImage);
+                    finish();
                 } catch (MalformedURLException e) {
                     throw new RuntimeException(e);
                 }

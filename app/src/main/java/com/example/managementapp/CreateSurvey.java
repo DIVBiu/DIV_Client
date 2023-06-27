@@ -148,6 +148,12 @@ public class CreateSurvey extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CreateSurvey.this, "Your Survey has been added successfully", Toast.LENGTH_LONG).show();
+                            }
+                    });
                     Intent intent = new Intent(CreateSurvey.this, MainMenuAdmin.class);
                     intent.putExtra("email", my_email);
                     intent.putExtra("address", address);
