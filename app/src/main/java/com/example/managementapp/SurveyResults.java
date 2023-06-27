@@ -98,15 +98,11 @@ public class SurveyResults extends AppCompatActivity {
                         public void run() {
                             surveys.clear();
                             surveys.addAll(convertJsonToSurveys(jsonResponse));
-//                            adapter = new ArrayAdapter<>(ChooseSurvey.this, android.R.layout.simple_list_item_1);
-                            //adapter.addAll(surveys);
                             adapter.notifyDataSetChanged();
                             lvSurveys.setVisibility(View.VISIBLE);
                         }
                     });
-//                    adapter = new ArrayAdapter<>(ChooseSurvey2.this, android.R.layout.simple_list_item_1);
-//                    lvSurveys.setAdapter(adapter);
-                    //adapter.addAll(surveys);
+
 
                 } else {
                     // Handle unsuccessful response

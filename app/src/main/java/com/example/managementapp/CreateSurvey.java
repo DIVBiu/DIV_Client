@@ -108,16 +108,6 @@ public class CreateSurvey extends AppCompatActivity {
         calendar.set(year, month, day);
         Date deadline = calendar.getTime();
 
-        // Retrieve voting options
-//        List<String> options = new ArrayList<>();
-//        for (EditText optionEditText : optionEditTextList) {
-//            String optionText = optionEditText.getText().toString();
-//            if (!TextUtils.isEmpty(optionText)) {
-//                String option = new String(optionText);
-//                options.add(option);
-//            }
-//        }
-
         String options = "";
         for (EditText optionEditText : optionEditTextList) {
             String optionText = optionEditText.getText().toString();
@@ -170,10 +160,6 @@ public class CreateSurvey extends AppCompatActivity {
             }
         });
 
-        // Create the survey object
-        //Survey survey = new Survey(title, question, deadline, options);
-
-        // Perform further actions with the created survey, such as saving to a database or sending to a server
     }
 }
 

@@ -65,8 +65,6 @@ public class ProblemDetails extends AppCompatActivity {
         textOpeningDate.setText(openingDate);
         textDescription.setText(description);
         if(!img.equals("")) {
-            //byte[] imageBytes = Base64.decode(img, Base64.DEFAULT);
-            // Decode the byte array into a Bitmap object
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
             image.setImageBitmap(bitmap);
         }

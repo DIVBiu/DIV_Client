@@ -56,9 +56,6 @@ import okhttp3.Response;
 
 public class ParkingScreen extends AppCompatActivity {
 
-//    private static final int IMAGE_CAPTURE_CODE = 100;
-//    private static final int IMAGE_PICK_CODE = 200;
-
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_PERMISSION_REQUEST = 2;
     private static final int CAMERA_REQUEST = 3;
@@ -69,12 +66,7 @@ public class ParkingScreen extends AppCompatActivity {
     private Button selectImageButton, takePhotoButton, submitButton;
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/cars/new_car";
     private String address, my_email, encodedImage;
-    //    private static final int PICK_IMAGE_REQUEST = 1;
-//    private static final int REQUEST_IMAGE_CAPTURE = 2;
-//    private static final int CAMERA_REQUEST = 100;
-//    private static final int PERMISSION_CODE = 1000;
     String cameraPermission[];
-//    Uri image_uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +200,6 @@ public class ParkingScreen extends AppCompatActivity {
             flag = 1;
             sending_number = encodedImage;
         }
-        //URL url = new URL(String.format(SERVER_URL, my_email, address, flag, sending_number));
         URL url = new URL(String.format(SERVER_URL));
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -234,13 +225,10 @@ public class ParkingScreen extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
                     resp = response;
-//                    Toast.makeText(ParkingScreen.this, "Your car number has been added successfully",Toast.LENGTH_LONG).show();
                     // Handle the response body here
                 } else {
                     resp = response;
-                    // Handle unsuccessful response
-                    //Toast.makeText(ParkingScreen.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                    //onResume();
+
                 }
                 try {
                     Thread.sleep(4000); // Sleep for 2 seconds

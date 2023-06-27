@@ -101,55 +101,6 @@ public class Problem {
         return image;
     }
 
-//    public static Bitmap convertToBitmap(String text, int textSize) {
-//        if (Objects.equals(text, "")) {
-//            return null;
-//        }
-//        // Create a paint object with desired attributes
-//        Paint paint = new Paint();
-//        paint.setTextSize(textSize);
-//        paint.setColor(Color.BLACK);
-//        paint.setTypeface(Typeface.DEFAULT);
-//        paint.setAntiAlias(true);
-//
-//        // Calculate the width and height of the text
-//        float textWidth = paint.measureText(text);
-//        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
-//        float textHeight = fontMetrics.bottom - fontMetrics.top;
-//
-//        // Create a bitmap with width and height based on text size
-//        Bitmap bitmap = Bitmap.createBitmap((int) textWidth, (int) textHeight, Bitmap.Config.ARGB_8888);
-//
-//        // Create a canvas and draw the text on the bitmap
-//        Canvas canvas = new Canvas(bitmap);
-//        canvas.drawText(text, 0, -fontMetrics.top, paint);
-//
-//        return bitmap;
-//    }
-//    public Bitmap convertToBitmap(String text, int textSize) {
-//        if (Objects.equals(text, "")){
-//            return null;
-//        }
-//        Paint paint = new Paint();
-//        paint.setTextSize(textSize);
-//        paint.setColor(Color.BLACK);
-//        paint.setAntiAlias(true);
-//        paint.setTextAlign(Paint.Align.LEFT);
-//
-//        Rect bounds = new Rect();
-//        paint.getTextBounds(text, 0, text.length(), bounds);
-//
-//        int width = bounds.width();
-//        int height = bounds.height();
-//
-//        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(bitmap);
-//        canvas.drawText(text, bounds.left, bounds.bottom, paint);
-//
-//        return bitmap;
-//
-//    }
-
     public void setImage(String image) {
         this.image = image;
     }

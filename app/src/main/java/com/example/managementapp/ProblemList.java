@@ -165,8 +165,7 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
 
                         } else {
                             // Handle unsuccessful response
-                            //Toast.makeText(ProblemList.this, "Problem Contacting the server", Toast.LENGTH_SHORT).show();
-                            //onResume();
+
                         }
                     }
                 });

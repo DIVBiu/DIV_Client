@@ -45,7 +45,6 @@ import okhttp3.Response;
 
 public class ChooseBuilding extends AppCompatActivity {
     private ListView lvBuildings;
-    //List<String> buildings = new ArrayList<String>();
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/users/get_buildings_by_user?email=%s";
     private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
     private static final String DELETE_SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/remove_tenant_from_building?email=%s&address=%s";
@@ -141,8 +140,6 @@ public class ChooseBuilding extends AppCompatActivity {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.code() == 201) {
-                            //String responseBody = response.body().string();
-                            //Map<String,String> answer = jsonToMap(responseBody);
                             Intent intent = new Intent(ChooseBuilding.this, MainMenuAdmin.class);
                             intent.putExtra("email", my_email);
                             intent.putExtra("building", selectedItem);
@@ -153,7 +150,6 @@ public class ChooseBuilding extends AppCompatActivity {
                             Intent intent = new Intent(ChooseBuilding.this, MainMenu.class);
                             intent.putExtra("email", my_email);
                             intent.putExtra("building", selectedItem);
-                            //intent.putStringArrayListExtra("buildings", buildings);
                             startActivity(intent);
                         }
                         else {

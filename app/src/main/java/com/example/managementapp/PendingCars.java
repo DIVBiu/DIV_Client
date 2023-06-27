@@ -146,7 +146,6 @@ public class PendingCars extends AppCompatActivity implements CarAdapter.OnItemC
                 }
             }
         });
-        //messageTextView.setText("This is a custom dialog message.");
 
         approveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +194,6 @@ public class PendingCars extends AppCompatActivity implements CarAdapter.OnItemC
                     }
                 });
 
-                //dialog.dismiss();
             }
         });
 

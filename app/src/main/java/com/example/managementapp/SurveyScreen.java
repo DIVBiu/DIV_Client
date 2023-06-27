@@ -112,7 +112,6 @@ public class SurveyScreen extends AppCompatActivity {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if (response.code()==200) {
-//                                  finish();
                                 Intent intent = new Intent(SurveyScreen.this, MainMenu.class);
                                 intent.putExtra("email", email);
                                 intent.putExtra("building", building);

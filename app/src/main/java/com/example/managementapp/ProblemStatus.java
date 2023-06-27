@@ -102,19 +102,14 @@ public class ProblemStatus extends AppCompatActivity implements RecyclerViewInte
                             problems.addAll(convertJsonToProblems(jsonResponse));
                             padapter.notifyDataSetChanged();
                             rvProblems.setVisibility(View.VISIBLE);
-                            //adapter = new ArrayAdapter<>(ProblemStatus.this, R.layout.item_problem);
-                            //lvProblems.setAdapter(adapter);
-                            //adapter.addAll(problems);
+
                         }
                     });
-//                    adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
-//                    lvBuildings.setAdapter(adapter);
-//                    adapter.addAll(buildings);
+
 
                 } else {
                     // Handle unsuccessful response
-                    //Toast.makeText(ProblemStatus.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();
-                    //onResume();
+
                 }
             }
         });

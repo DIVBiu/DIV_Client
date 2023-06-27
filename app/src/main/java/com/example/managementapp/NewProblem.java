@@ -197,12 +197,7 @@ public class NewProblem extends AppCompatActivity {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-//                            String responseBody = response.body().string();
-//                            Log.d("LoginResponse", responseBody);
-//                            Intent intent = new Intent(NewProblem.this, MainMenu.class);
-//                            intent.putExtra("building", address);
-//                            intent.putExtra("email", my_email);
-//                            startActivity(intent);
+
                             // Handle the response body here
                         } else {
                             // Handle unsuccessful response
@@ -228,28 +223,6 @@ public class NewProblem extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
-//            // Image captured from camera
-//            problemImage.setImageURI(image_uri);
-//        } else if (requestCode == IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
-//            // Image selected from gallery
-//            Uri selectedImageUri = data.getData();
-//            problemImage.setImageURI(selectedImageUri);
-//        }
-//    }
-//    private void openCamera(){
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Images.Media.TITLE,"New Picture");
-//        values.put(MediaStore.Images.Media.DESCRIPTION,"From the Camera");
-//        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-//        startActivityForResult(cameraIntent,IMAGE_CAPTURE_CODE);
-//    }
 
     private void openImagePicker() {
         Intent intent = new Intent();
@@ -330,8 +303,6 @@ public class NewProblem extends AppCompatActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.code() == 201) {
-                        //String responseBody = response.body().string();
-                        //Map<String,String> answer = jsonToMap(responseBody);
                         Intent intent = new Intent(NewProblem.this, MainMenuAdmin.class);
                         intent.putExtra("email", my_email);
                         intent.putExtra("building", address);

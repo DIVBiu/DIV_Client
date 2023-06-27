@@ -90,11 +90,6 @@ public class PendingTenants extends AppCompatActivity {
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
                             get_tenants(address);
-
-//                    adapter = new ArrayAdapter<>(ChooseBuilding.this, android.R.layout.simple_list_item_1);
-//                    lvBuildings.setAdapter(adapter);
-//                    adapter.addAll(buildings);
-
                         } else {
                             // Handle unsuccessful response
                             Toast.makeText(PendingTenants.this, "Username or password are incorrect", Toast.LENGTH_SHORT).show();

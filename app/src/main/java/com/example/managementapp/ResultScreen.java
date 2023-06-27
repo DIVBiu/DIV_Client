@@ -163,8 +163,7 @@ public class ResultScreen extends AppCompatActivity {
                     });
 
                 } else {
-                    // Handle unsuccessful response
-                    //onResume();
+
                 }
             }
         });

@@ -121,11 +121,9 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    //String responseBody = response.body().string();
-                    //Map<String,String> answer = jsonToMap(responseBody);
+
                     Intent intent = new Intent(LoginPage.this, ChooseBuilding.class);
                     intent.putExtra("email", email);
-                    //intent.putStringArrayListExtra("buildings", buildings);
                     startActivity(intent);
                     // Handle the response body here
                 } else {

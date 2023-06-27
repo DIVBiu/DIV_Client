@@ -102,8 +102,7 @@ public class RetryExample {
     private static int i =0;
 
     public static Response intercept(Request request) throws IOException {
-        //Request request = chain.request();
-        //Response response;
+
 
         OkHttpClient client = new OkHttpClient();
         for (; i < MAX_RETRIES; i++) {
