@@ -49,7 +49,7 @@ import okhttp3.Response;
 public class ProblemList extends AppCompatActivity implements RecyclerViewInterface {
     private RecyclerView recyclerView;
     private List<String> categoryOptions;
-    private String my_email, address, car_email, tenant_name, answer;
+    private String my_email, address, car_email;
     private ProblemAdapter adapter;
     private ArrayList<Problem> problems;
     private Problem clickedProblem;
@@ -68,10 +68,9 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
         recyclerView = findViewById(R.id.recyclerView);
         problems = new ArrayList<>();
         adapter = new ProblemAdapter(this, problems, this, textEmpty);
-
+        adapter.getFilter();
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
-
         categoryOptions = new ArrayList<>();
         categoryOptions.add("All");
         categoryOptions.add("Electricity");
@@ -173,11 +172,4 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
                 });
             }
 
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        adapter.notifyDataSetChanged();
-//        recyclerView.setVisibility(View.VISIBLE);
-//    }
 }

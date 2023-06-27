@@ -17,11 +17,13 @@
     <string name="problem">New Problem</string>
     <string name="chat">Chat</string>
     <string name="confirm_survey">Are you sure this is your choice? You will not be able to change after submitting</string>
-
     <string name="address">Address</string>
     <string name="welcome">Welcome To Your Building</string>
     <string name="select_an_option">Select an option:</string>
     <string name="spinner_options">dropDownMenuExample</string>
+    <string name="building">building</string>
+    <string name="email">email</string>
+    <string name="chatbuilding">\"Chat Building: \"</string>
     <string-array name="options">
         <item>Option 1</item>
         <item>Option 2</item>
