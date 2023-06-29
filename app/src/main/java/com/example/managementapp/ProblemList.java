@@ -71,13 +71,13 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
         adapter.getFilter();
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
-        categoryOptions = new ArrayList<>();
-        categoryOptions.add("All");
-        categoryOptions.add("Electricity");
-        categoryOptions.add("Plumbing");
-        categoryOptions.add("Infrastructure");
-        categoryOptions.add("Construction");
-        categoryOptions.add("Other");
+//        categoryOptions = new ArrayList<>();
+//        categoryOptions.add("All");
+//        categoryOptions.add("Electricity");
+//        categoryOptions.add("Plumbing");
+//        categoryOptions.add("Infrastructure");
+//        categoryOptions.add("Construction");
+//        categoryOptions.add("Other");
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         try {
@@ -86,24 +86,24 @@ public class ProblemList extends AppCompatActivity implements RecyclerViewInterf
             throw new RuntimeException(e);
         }
 
-        Spinner categorySpinner = findViewById(R.id.categorySpinner);
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryOptions);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(categoryAdapter);
+        //Spinner categorySpinner = findViewById(R.id.categorySpinner);
+        //ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryOptions);
+        //categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //categorySpinner.setAdapter(categoryAdapter);
 
         // Set up the spinner item selection listener
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = categoryOptions.get(position);
-                adapter.getFilter().filter(selectedCategory);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+//        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String selectedCategory = categoryOptions.get(position);
+//                adapter.getFilter().filter(selectedCategory);
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
 
     }
 

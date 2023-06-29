@@ -32,7 +32,7 @@ public class MainMenuAdmin extends AppCompatActivity {
         Button pending_cars = findViewById(R.id.pendingCars);
         Button pending_tenants = findViewById(R.id.pendingTenants);
         parking_btn.setOnClickListener(c -> {
-            Intent intent = new Intent(MainMenuAdmin.this, ParkingScreen.class);
+            Intent intent = new Intent(MainMenuAdmin.this, AvailabilityOrAddCar.class);
             intent.putExtra("building", BuildingID);
             intent.putExtra("email", my_email);
             startActivity(intent);

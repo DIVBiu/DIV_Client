@@ -31,7 +31,7 @@ public class MainMenu extends AppCompatActivity{
         Button answer_survey_btn = findViewById(R.id.surveyBtn);
         Button parking_btn = findViewById(R.id.parkingBtn);
         parking_btn.setOnClickListener(c -> {
-            Intent intent = new Intent(MainMenu.this, ParkingScreen.class);
+            Intent intent = new Intent(MainMenu.this, AvailabilityOrAddCar.class);
             intent.putExtra("building", BuildingID);
             intent.putExtra("email", my_email);
             startActivity(intent);

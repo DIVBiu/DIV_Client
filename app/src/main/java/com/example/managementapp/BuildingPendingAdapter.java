@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class BuildingAdapter extends ArrayAdapter<String> {
-    public BuildingAdapter(@NonNull Context context, ArrayList<String> dataArrayList) {
-        super(context, R.layout.item_building, dataArrayList);
+public class BuildingPendingAdapter extends ArrayAdapter<String> {
+    public BuildingPendingAdapter(@NonNull Context context, ArrayList<String> dataArrayList) {
+        super(context, R.layout.item_pending_building, dataArrayList);
     }
 
     @NonNull
@@ -24,7 +24,7 @@ public class BuildingAdapter extends ArrayAdapter<String> {
         String listData = getItem(position);
 
         if (view == null){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.item_building, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.item_pending_building, parent, false);
         }
         TextView listName = view.findViewById(R.id.listName);
         listName.setText(listData);

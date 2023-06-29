@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,17 +46,21 @@ import okhttp3.Response;
 
 public class ChooseBuilding extends AppCompatActivity {
     private ListView lvBuildings;
+    private ListView lvPendingBuildings;
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/users/get_buildings_by_user?email=%s";
     private static final String SERVER_URL2 = "http://" + GetIP.getIPAddress() + ":5000/am_I_admin?email=%s&address=%s";
     private static final String DELETE_SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/remove_tenant_from_building?email=%s&address=%s";
     ArrayList<String> buildings;
+    ArrayList<String> pending_buildings;
     private BuildingAdapter adapter;
-
+    private  BuildingPendingAdapter padapter;
     private final ArrayList<String> buildingList = new ArrayList<>();
+    private final ArrayList<String> pending_buildingList = new ArrayList<>();
     private String my_email;
     private RadioGroup radio_group;
     private RadioButton radio_button_tenant, radio_button_admin;
     private boolean userSelect;
+    private TextView pending;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -65,8 +70,13 @@ public class ChooseBuilding extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_choosebuilding);
         lvBuildings = findViewById(R.id.my_listview);
+        pending = findViewById(R.id.title_pending_textview);
+        lvPendingBuildings = findViewById(R.id.my_pending_listview);
         buildings = new ArrayList<>();
+        pending_buildings = new ArrayList<>();
+        padapter = new BuildingPendingAdapter(this, pending_buildingList);
         adapter = new BuildingAdapter(this, buildingList);
+        lvPendingBuildings.setAdapter(padapter);
         lvBuildings.setAdapter(adapter);
         my_email = getIntent().getExtras().get("email").toString();
         try {
@@ -170,7 +180,11 @@ public class ChooseBuilding extends AppCompatActivity {
         openDialog.setOnClickListener(v -> {
             showCustomDialog();
         });
-
+        lvPendingBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(ChooseBuilding.this, "Waiting for an admin approval", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void get_building(String email) throws MalformedURLException {
@@ -191,8 +205,19 @@ public class ChooseBuilding extends AppCompatActivity {
                     try {
                         jsonObject = new JSONObject(jsonResponse);
                         JSONArray buildingsArray = jsonObject.getJSONArray("buildings");
+                        JSONArray pending_buildingArray = jsonObject.getJSONArray("pending approval");
+                        if (pending_buildingArray != null && pending_buildingArray.length() == 0) {
+                            // The JSONArray is empty
+                            pending.setText("");
+                        }
+                        pending_buildings.clear();
+                        pending_buildingList.clear();
                         buildings.clear();
                         buildingList.clear();
+                        for (int i = 0; i < pending_buildingArray.length(); i++) {
+                            String pending_building = pending_buildingArray.getString(i);
+                            pending_buildings.add(pending_building);
+                        }
                         for (int i = 0; i < buildingsArray.length(); i++) {
                             String building = buildingsArray.getString(i);
                             buildings.add(building);
@@ -200,13 +225,15 @@ public class ChooseBuilding extends AppCompatActivity {
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
+                    pending_buildingList.addAll(pending_buildings);
                     buildingList.addAll(buildings);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             adapter.notifyDataSetChanged();
                             lvBuildings.setVisibility(View.VISIBLE);
-
+                            lvPendingBuildings.setVisibility(View.VISIBLE);
                         }
                     });
                 } else {
