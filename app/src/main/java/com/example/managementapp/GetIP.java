@@ -14,7 +14,7 @@ public class GetIP {
                 List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
                 for (InetAddress addr : addrs) {
                     if (!addr.isLoopbackAddress() && addr instanceof Inet4Address) {
-                        return "172.20.10.2";
+                        return "192.168.10.127";
 
                     }
                 }

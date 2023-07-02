@@ -141,8 +141,10 @@ public class ChatScreen extends AppCompatActivity {
                             try {
                                 jsonResponse = response.body().string();
                             } catch (IOException e) {
+                                Log.i("failure1","bad");
                                 throw new RuntimeException(e);
                             }
+
                             messages.addAll(convertJsonToMessages(jsonResponse));
                             chatAdapter.notifyDataSetChanged();
                             recyclerView.setVisibility(View.VISIBLE);

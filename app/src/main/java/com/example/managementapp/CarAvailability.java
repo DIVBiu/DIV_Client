@@ -1,38 +1,33 @@
 package com.example.managementapp;
-import com.squareup.picasso.Picasso;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Base64;
-import android.view.View;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 public class CarAvailability extends AppCompatActivity {
     private String address, my_email, number;
-    private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/get_parking_view?address=%s";
-
+    private Matrix matrix;
+    private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/get_parking_image?address=%s";
+    private DisplayMetrics displayMetrics;
+    private int screenWidth, screenHeight;
     ImageView image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +39,17 @@ public class CarAvailability extends AppCompatActivity {
         image = findViewById(R.id.photoImageView);
         my_email = getIntent().getExtras().get("email").toString();
         address = getIntent().getExtras().get("building").toString();
-        number = getIntent().getExtras().get("number").toString();
+        matrix = new Matrix();
+        matrix.postRotate(90);
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenWidth = displayMetrics.widthPixels;
+        screenHeight = displayMetrics.heightPixels;
+
         try {
             get_content(address);
         } catch (MalformedURLException e) {
+            Log.i("SHIT", "SHIT SHIT SHIT");
             throw new RuntimeException(e);
         }
     }
@@ -66,10 +68,26 @@ public class CarAvailability extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String jsonResponse = response.body().string();
-                    byte[] imageBytes = Base64.decode(jsonResponse, Base64.DEFAULT);
-                    // Decode the byte array into a Bitmap object
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                    image.setImageBitmap(bitmap);
+                    JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+                    String s_image = jsonObject.get("image").getAsString();
+                    if (!jsonResponse.equals("")) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                byte[] imageBytes = Base64.decode(s_image, Base64.DEFAULT);
+                                // Decode the byte array into a Bitmap object
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                                //Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, screenWidth, screenHeight, true);
+
+                                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                                //Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, screenWidth, screenHeight, matrix, true);
+                                //Bitmap scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, screenWidth, screenHeight, true);
+
+                                image.setImageBitmap(rotatedBitmap);
+                            }
+                        });
+                    }
+
                     //convertJsonToImageView(jsonResponse,imageView)
                 } else {
                     runOnUiThread(new Runnable() {

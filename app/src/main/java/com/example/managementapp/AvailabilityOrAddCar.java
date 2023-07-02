@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,7 +32,7 @@ import okhttp3.Response;
 
 public class AvailabilityOrAddCar extends AppCompatActivity {
     private String my_email;
-    private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/get_parking_slots?address=%s";
+    private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/get_parking_slots?address=%s";
     private TextView slots;
     private String address;
     @Override
@@ -49,6 +50,8 @@ public class AvailabilityOrAddCar extends AppCompatActivity {
         try {
             get_available_spot();
         } catch (MalformedURLException e) {
+            Log.i("SHIT", "SHIT SHIT SHIT");
+
             throw new RuntimeException(e);
         }
         availability.setOnClickListener(c -> {
@@ -81,7 +84,13 @@ public class AvailabilityOrAddCar extends AppCompatActivity {
                     String jsonResponse = response.body().string();
                     JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
                     String amount = jsonObject.get("amount").getAsString();
-                    slots.setText(amount);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            slots.setText(amount);
+                        }
+                    });
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override

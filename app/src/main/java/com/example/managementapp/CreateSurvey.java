@@ -156,7 +156,7 @@ public class CreateSurvey extends AppCompatActivity {
                     });
                     Intent intent = new Intent(CreateSurvey.this, MainMenuAdmin.class);
                     intent.putExtra("email", my_email);
-                    intent.putExtra("address", address);
+                    intent.putExtra("building", address);
                     startActivity(intent);
                     // Handle the response body here
                 } else {

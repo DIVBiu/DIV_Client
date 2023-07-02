@@ -42,7 +42,7 @@ public class SurveyScreen extends AppCompatActivity {
     private TextView title;
     private SurveyItem my_survey;
     private static final String SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/get_survey_by_title?title=%s";
-    private static final String POST_SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/update_survey?email=%s&title=%s&choice=%s";
+    private static final String POST_SERVER_URL = "http://" + GetIP.getIPAddress() + ":5000/buildings/update_survey?email=%s&title=%s&choice=%s&address=%s";
     Button survey_btn;
 
     public static SurveyItem fromJson(String json) {
@@ -78,7 +78,11 @@ public class SurveyScreen extends AppCompatActivity {
         dialog.setContentView(R.layout.confirm_submittion);
         Button cancel = dialog.findViewById(R.id.cancel_btn);
         Button confirm_survey = dialog.findViewById(R.id.confirm_survey);
-
+//        confirm_survey.setOnClickListener(v -> {
+//            finish();
+//            get_survey(survey_title);
+//
+//        });
         confirm_survey.setOnClickListener(t -> {
                 int selectedItemPosition = lvSurvey.getCheckedItemPosition();
 
@@ -87,7 +91,7 @@ public class SurveyScreen extends AppCompatActivity {
 
                     URL url = null;
                     try {
-                        url = new URL(String.format(POST_SERVER_URL, email, survey_title, String.valueOf(selectedItemPosition)));
+                        url = new URL(String.format(POST_SERVER_URL, email, survey_title, String.valueOf(selectedItemPosition), building));
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
                     }
@@ -96,6 +100,7 @@ public class SurveyScreen extends AppCompatActivity {
                             .addFormDataPart("email", email)
                             .addFormDataPart("title", survey_title)
                             .addFormDataPart("choice", String.valueOf(selectedItemPosition))
+                            .addFormDataPart("address", building)
                             .build();
                     Request request = new Request.Builder()
                             .url(url)
@@ -111,7 +116,7 @@ public class SurveyScreen extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.code()==200) {
+                             if (response.code()==200) {
                                 Intent intent = new Intent(SurveyScreen.this, MainMenu.class);
                                 intent.putExtra("email", email);
                                 intent.putExtra("building", building);

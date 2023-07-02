@@ -11,14 +11,14 @@
         android:id="@+id/slots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
+        android:textSize="24dp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/availabilitybtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.036"
+        app:layout_constraintHorizontal_bias="0.00"
         app:layout_constraintStart_toStartOf="@+id/availabilitybtn"
         app:layout_constraintTop_toTopOf="@+id/availabilitybtn"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintVertical_bias="0.58" />
 
     <Button
         android:id="@+id/availabilitybtn"

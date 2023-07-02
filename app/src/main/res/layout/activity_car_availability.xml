@@ -5,36 +5,21 @@
     android:background="@drawable/default_background"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:cardCornerRadius="8dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/titleTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="The parking lot:"
-                android:textAlignment="center"
-                android:textSize="40sp"
-                android:textColor="@android:color/black" />
-
             <ImageView
                 android:id="@+id/photoImageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_default_img" />
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_default_img"
+    />
 
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
+<!--    android:src="@drawable/ic_default_img"-->
+    <!--            <TextView-->
+    <!--                android:id="@+id/titleTextView"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="The parking lot:"-->
+    <!--                android:textAlignment="center"-->
+    <!--                android:textSize="40sp"-->
+    <!--                android:textColor="@android:color/black" />-->
